@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "meteor/copleykj:grapher-link-executor": [
+        "packages/grapher-link-executor/grapher-link-executor.ts"
+      ],
+      "meteor/cultofcoders:grapher-react": [
+        "packages/grapher-react/main.client.js",
+        "packages/grapher-react/main.server.js"
+      ]
+    }
+  }
+}
