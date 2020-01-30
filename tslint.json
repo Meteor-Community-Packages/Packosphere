@@ -7,7 +7,9 @@
     "rules": {
       "semicolon": true,
       "quotemark": [true, "single", "jsx-double"],
-      "trailing-comma": true
+      "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
+      "interface-name": false,
+      "no-console": false
     },
     "rulesDirectory": []
 }
