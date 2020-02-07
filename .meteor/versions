@@ -47,7 +47,7 @@ launch-screen@1.1.1
 livedata@1.0.18
 localstorage@1.2.0
 logging@1.1.20
-matb33:collection-hooks@0.8.4
+matb33:collection-hooks@1.0.1
 meteor@1.9.3
 meteor-base@1.4.0
 minifier-css@1.5.0
@@ -67,7 +67,7 @@ npm-mongo@3.3.0
 ordered-dict@1.1.0
 package-version-parser@3.2.0
 peerlibrary:extend-publish@0.6.0
-peerlibrary:meteor-packages@2.0.0
+peerlibrary:meteor-packages@2.1.0
 peerlibrary:subscription-scope@0.5.0
 promise@0.11.2
 random@1.1.0

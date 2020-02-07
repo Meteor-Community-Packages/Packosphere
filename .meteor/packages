@@ -19,6 +19,7 @@ shell-server@0.4.0            # Server-side component of the `meteor shell` comm
 static-html             # Define static page content in .html files
 accounts-password@1.5.2
 react-meteor-data       # React higher-order component for reactively tracking Meteor data
+matb33:collection-hooks@1.0.1!
 cultofcoders:grapher
 cultofcoders:grapher-react@0.1.5
 copleykj:grapher-link-executor
