@@ -9,7 +9,8 @@
       "quotemark": [true, "single", "jsx-double"],
       "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
       "interface-name": false,
-      "no-console": false
+      "no-console": false,
+      "ordered-imports": false
     },
     "rulesDirectory": []
 }
