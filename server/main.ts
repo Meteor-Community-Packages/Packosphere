@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import { PackageServer } from 'meteor/peerlibrary:meteor-packages'
+import { PackageServer } from 'meteor/peerlibrary:meteor-packages';
 
-Meteor.startup(function() {
+import './api/LatestPackages';
+
+Meteor.startup(() => {
   PackageServer.startSyncing();
 });
