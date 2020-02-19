@@ -45,7 +45,7 @@ PackageServer.runIfSyncFinished(() => {
 
     const { recommended: previousRecommend } = this.previous as ReleaseVersion;
     if (recommended !== previousRecommend && recommended === true) {
-      const text = `\`${track}@${version}\` is now a recommended release.`;
+      const text = `\`${track}@${version}\` is now a recommended release. 🎉`;
 
       postToSlack(text);
       postTwitterStatus(text);
