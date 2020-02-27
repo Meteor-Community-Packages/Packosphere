@@ -3,6 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import Twitter, { AccessTokenOptions } from 'twitter';
 import markdownToTweet from 'markdown-to-tweet';
 
+import { postToSlack } from '../slackbot';
+
 const twitterOauth: AccessTokenOptions = Meteor.settings?.twitter;
 let client: Twitter;
 

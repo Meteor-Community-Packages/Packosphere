@@ -2,18 +2,23 @@ import { WebClient } from '@slack/web-api';
 import { Meteor } from 'meteor/meteor';
 
 const botToken: string = Meteor.settings?.slack?.botToken;
-const client = new WebClient(botToken);
+let client: WebClient;
 
 const CHANNEL = '#packages';
 
-if (!botToken) {
-    throw new Meteor.Error('NoToken', 'It appears that you have not specified a slack token in settings.json');
+if (botToken) {
+  client = new WebClient(botToken);
+} else {
+  throw new Meteor.Error(
+    'NoToken',
+    'It appears that you have not specified a slack token in settings.json',
+  );
 }
 
-export const postToSlack = async (text: string) => {
+export const postToSlack = async (text: string, channel: string = CHANNEL) => {
   try {
     await client.chat.postMessage({
-      channel: CHANNEL,
+      channel,
       text,
     });
   } catch (error) {
