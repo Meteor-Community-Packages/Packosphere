@@ -7,7 +7,7 @@ export default class PersistentSettings<T extends { [P in keyof T]: string | num
 
   public get<K extends keyof T>(key: K): T[K] {
     const record = Settings.findOne({ _id: this.id }) as T;
-    return record[key];
+    return record && record[key];
   }
 
   public set<K extends keyof T>(key: K, value: T[K]) {
