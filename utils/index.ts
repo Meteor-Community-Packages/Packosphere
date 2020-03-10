@@ -1,4 +1,5 @@
 
 export const makeAtmosphereLink = (packageName: string) => {
-  return `https://atmospherejs.com/${packageName.replace(':', '/')}`;
+  const path = packageName.includes(':') ? packageName.replace(':', '/') : `meteor/${packageName}`;
+  return `https://atmospherejs.com/${path}`;
 };
