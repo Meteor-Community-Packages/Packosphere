@@ -2,7 +2,7 @@ import React from 'react';
 import { LatestPackage } from 'meteor/peerlibrary:meteor-packages';
 import PackageCard from '../PackageCard'
 
-interface CardGridProps {
+type CardGridProps = {
   cardData: Pick<LatestPackage, "packageName" | "description">[]
 }
 export default ({ cardData }: CardGridProps) => (

@@ -2,9 +2,9 @@ import React from 'react';
 import { CloudDownloadOutline } from 'heroicons-react';
 import { LatestPackage } from 'meteor/peerlibrary:meteor-packages';
 
-export type CardData = Pick<LatestPackage, "packageName" | "description" | "">
+export type CardData = Pick<LatestPackage, "packageName" | "description">
 
-interface PackageCardProps {
+type PackageCardProps = {
   data: CardData
 }
 export default ({ data }: PackageCardProps) => (
