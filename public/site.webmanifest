@@ -1,0 +1,14 @@
+{
+    "name": "Packosphere",
+    "short_name": "Packosphere",
+    "icons": [
+        {
+            "src": "/android-chrome-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#d97706",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}
