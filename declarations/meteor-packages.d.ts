@@ -1,30 +1,3 @@
-declare module 'meteor/copleykj:grapher-link-executor' {
-    import { Mongo } from 'meteor/mongo'
-    export function addLinks<T>(collection: Mongo.Collection<T>, links: object): void;
-    export const executeLinks: () => void;
-}
-
-declare module 'meteor/mongo' {
-    module Mongo {
-      interface Collection<T> {
-        _name: string;
-        attachSchema(schema: object): void;
-        addLinks(links: object): void;
-        createQuery(nameOrOptions: object | string, options?: object): GrapherQuery<T>;
-        after: {
-          insert(callback: (userId: string, doc: any) => void | Promise<void>): void;
-          update(callback: (userId: string, doc: any) => void | Promise<void>, options?: {fetchPrevious: boolean}): void;
-        }
-      }
-      interface GrapherQuery<T> {
-        clone(): GrapherQuery<T>;
-        fetch(): T[];
-        fetchOne(): T;
-        expose(options: object): void;
-      }
-    }
-}
-
 declare module 'meteor/peerlibrary:meteor-packages' {
   import { Mongo } from 'meteor/mongo';
   class PackageServer {
@@ -48,13 +21,13 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     maintainers: {
       username: string;
       id: string;
-      [key: string]: any;
+      // [key: string]: any;
     }[];
     homepage?: string;
     lastUpdated: Date;
     directAdds?: number;
     totalAdds?: number;
-    [key: string]: any;
+    // [key: string]: any;
   }
 
   interface Version extends Document{
@@ -67,12 +40,12 @@ declare module 'meteor/peerlibrary:meteor-packages' {
       url: string;
       tarballHash: string;
       treeHash: string;
-      [key: string]: any;
+      // [key: string]: any;
     };
     readme: {
       url: string;
       hash: string;
-      [key: string]: any;
+      // [key: string]: any;
     };
     dependencies: {
       constraint?: string;
@@ -81,15 +54,15 @@ declare module 'meteor/peerlibrary:meteor-packages' {
         weak?: boolean;
         unordered?: boolean;
         implied?: boolean;
-        [key: string]: any;
+        // [key: string]: any;
       }[];
       packageName: string;
-      [key: string]: any;
+      // [key: string]: any;
     }[];
     exports: {
       name: string;
       architectures: string[];
-      [key: string]: any;
+      // [key: string]: any;
     }[];
     unmigrated?: boolean;
     debugOnly?: boolean;
@@ -97,14 +70,14 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     publishedBy: {
       username: string
       id: string;
-      [key: string]: any;
+      // [key: string]: any;
     };
     published: Date;
     lastUpdated: Date;
     ecRecordFormat: string;
     compilerVersion: string;
     releaseName: string;
-    [key: string]: any;
+    // [key: string]: any;
   }
 
   interface Build extends Document {
@@ -114,7 +87,7 @@ declare module 'meteor/peerlibrary:meteor-packages' {
       url: string;
       tarballHash: string;
       treeHash: string;
-      [key: string]: any;
+      // [key: string]: any;
     };
     builtBy: {
       username: string;
@@ -123,7 +96,7 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     };
     buildPublished: Date;
     lastUpdated: Date;
-    [key: string]: any;
+    // [key: string]: any;
   }
 
   interface ReleaseTrack extends Document {
@@ -132,10 +105,10 @@ declare module 'meteor/peerlibrary:meteor-packages' {
       username: string;
       id: string;
       isOrganization: boolean;
-      [key: string]: any;
+      // [key: string]: any;
     }[];
     lastUpdated: Date;
-    [key: string]: any;
+    // [key: string]: any;
   }
 
   interface ReleaseVersion extends Document{
@@ -152,10 +125,10 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     publishedBy: {
       username: string;
       id: string;
-      [key: string]: any;
+      // [key: string]: any;
     };
     lastUpdated: Date;
-    [key: string]: any;
+    // [key: string]: any;
   }
 
   interface LatestPackage extends Version { }
@@ -169,9 +142,3 @@ declare module 'meteor/peerlibrary:meteor-packages' {
   }
 
 }
-
-declare module 'markdown-to-tweet' {
-  export default function (markdown: string): Promise<string>
-}
-
-declare module 'meteor/cultofcoders:grapher-react'

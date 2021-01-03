@@ -1,3 +1,3 @@
-import { LatestPackages } from '../../../api/LatestPackages';
+import { LatestPackages } from '../../../api';
 
 export { LatestPackages };

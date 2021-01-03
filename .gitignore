@@ -1,4 +1,5 @@
 node_modules/
-packages/
+packages/grapher-react
+packages/package-server-sync
 .deploy/
 *settings.json

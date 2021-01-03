@@ -1,3 +1,3 @@
-import { ReleaseVersions } from '../../../api/ReleaseVersions';
+import { ReleaseVersions } from '../../../api';
 
 export { ReleaseVersions };
