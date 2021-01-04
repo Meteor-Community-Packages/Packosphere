@@ -2,13 +2,13 @@ import PersistentSettings from '../PersistentSettings';
 import { LatestPackages } from '../../api/LatestPackages';
 import { ReleaseVersions } from '../../api/ReleaseVersions';
 import { PackageServer, LatestPackage, ReleaseVersion } from 'meteor/peerlibrary:meteor-packages';
-import { makeAtmosphereLink } from '/utils';
+import { makeAtmosphereLink } from '../../../utils';
 import { postTwitterStatus } from './twitterbot';
 import { postToSlack } from './slackbot';
 import { Meteor } from 'meteor/meteor';
 
 interface BotSettings {
-  lastAnnounceTime: Date;
+  lastAnnounceTime: Date
 }
 const ANNOUNCE_INTERVAL = 60 * 60 * 1000;
 const Settings = new PersistentSettings<BotSettings>('bot-settings');
@@ -58,7 +58,7 @@ if (Meteor.isProduction) {
         postToSlack(text);
         postTwitterStatus(text);
       }
-    }, {fetchPrevious: false});
+    }, { fetchPrevious: false });
 
     ReleaseVersions.after.insert(async (userId: string, doc: ReleaseVersion) => {
       const { track, version } = doc;
@@ -71,16 +71,16 @@ if (Meteor.isProduction) {
     });
 
     ReleaseVersions.after.update(
-      async function(this: { previous: ReleaseVersion }, userId: string, doc: ReleaseVersion) {
-      const { track, version, recommended} = doc;
+      async function (this: { previous: ReleaseVersion }, userId: string, doc: ReleaseVersion) {
+        const { track, version, recommended } = doc;
 
-      const { recommended: previousRecommend } = this.previous as ReleaseVersion;
-      if (recommended !== previousRecommend && recommended === true) {
-        const text = `\`${track}@${version}\` is now a recommended release. 🎉 \n\nTime to update your apps!`;
+        const { recommended: previousRecommend } = this.previous;
+        if (recommended !== previousRecommend && recommended) {
+          const text = `\`${track}@${version}\` is now a recommended release. 🎉 \n\nTime to update your apps!`;
 
-        postToSlack(text);
-        postTwitterStatus(text);
-      }
-    });
+          postToSlack(text);
+          postTwitterStatus(text);
+        }
+      });
   });
 }
