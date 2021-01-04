@@ -109,9 +109,21 @@ declare module 'meteor/cultofcoders:grapher' {
     }
   }
 
+  export function createQuery <T>(
+    body: Grapher.Body<T> | {},
+    options?: {}
+  ): Grapher.Query<T>
+
+  export function createQuery <T>(
+    name: string,
+    body: Grapher.Body<T> | {},
+    options?: {}
+  ): Grapher.Query<T>
+
   export function setAstToQueryDefaults(
     options: Grapher.ASTToQueryOptions
   ): void
+
 
   export const db: Readonly<{
     [key: string]: Mongo.CollectionStatic

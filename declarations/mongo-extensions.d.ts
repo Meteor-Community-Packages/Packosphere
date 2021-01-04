@@ -216,6 +216,11 @@ declare module 'meteor/mongo' {
         query: Grapher.GraphQLQuery<T extends object ? T : {}>
       ): Mongo.Cursor<T>
       createQuery<T>(
+        name: 'string',
+        body: Grapher.Body<T> | {},
+        options?: {}
+      ): Grapher.Query<T>
+      createQuery<T>(
         body: Grapher.Body<T> | {},
         options?: {}
       ): Grapher.Query<T>
