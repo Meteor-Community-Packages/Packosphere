@@ -19,7 +19,7 @@ const packages = [
   ,{ "_id" : "QtTfhoESHWozwvDAX", "description" : "Latest version of X-Editable for Bootstrap with wysihtml5 rich text editor", "packageName" : "1024kilobyte:x-editable-bootstrap" }
   ,{ "_id" : "poMDHPMj67udcL7n7", "description" : "x-editable in a Blaze template, taking care of reactive updates to x-editable automatically", "packageName" : "1024kilobyte:x-editable-reactive-template" }
   ,{ "_id" : "4TzTmADhh3BRFg7JB", "packageName" : "1497036567:errors", "description" : "A pattern to display application errors to the user" }
-  ,{ "_id" : "HhvthqxmjyPq86CQQ", "description" : "[BETA] A wrapper around aldeed:simple-schema that handles error parsing and displays.", "packageName" : "19degrees:gravity" }
+  ,{ "_id" : "HhvthqxmjyPq86CQQ", "description" : "A wrapper around aldeed:simple-schema that handles error parsing and displays.", "packageName" : "19degrees:gravity" }
   ,{ "_id" : "fyksw4K367HQ3WRiu", "description" : "A server side PayPal package that helps make restful API calls to Paypal.", "packageName" : "19degrees:paypal" }
   ,{ "_id" : "bjq8nmMwCzdpGERaD", "packageName" : "19degrees:paypal-extended-secured", "description" : "A server side PayPal package that helps make restful API calls to Paypal." }
   ,{ "_id" : "3uNatpFPhBZFvjMuZ", "packageName" : "19degrees:scope-permission-demo", "description" : "An in-depth look into scoping and permissions of Meteor." }
