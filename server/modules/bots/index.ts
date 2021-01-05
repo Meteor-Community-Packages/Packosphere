@@ -2,7 +2,7 @@ import PersistentSettings from '../PersistentSettings';
 import { LatestPackages } from '../../api/LatestPackages';
 import { ReleaseVersions } from '../../api/ReleaseVersions';
 import { PackageServer, LatestPackage, ReleaseVersion } from 'meteor/peerlibrary:meteor-packages';
-import { makeAtmosphereLink } from '../../../utils';
+import { makeAtmosphereLink } from '../../../imports/utils';
 import { postTwitterStatus } from './twitterbot';
 import { postToSlack } from './slackbot';
 import { Meteor } from 'meteor/meteor';
