@@ -6,7 +6,7 @@ let client: WebClient;
 
 const CHANNEL = '#packages';
 
-if (botToken) {
+if (typeof botToken !== 'undefined' && botToken.length !== 0) {
   client = new WebClient(botToken);
 } else {
   throw new Meteor.Error(
@@ -15,7 +15,7 @@ if (botToken) {
   );
 }
 
-export const postToSlack = async (text: string, channel: string = CHANNEL) => {
+export const postToSlack = async (text: string, channel: string = CHANNEL): Promise<void> => {
   try {
     await client.chat.postMessage({
       channel,

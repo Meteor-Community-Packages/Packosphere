@@ -3,21 +3,19 @@ import { Meteor } from 'meteor/meteor';
 import Twitter, { AccessTokenOptions } from 'twitter';
 import markdownToTweet from 'markdown-to-tweet';
 
-import { postToSlack } from '../slackbot';
-
 const twitterOauth: AccessTokenOptions = Meteor.settings?.twitter;
 let client: Twitter;
 
-if (twitterOauth) {
+if (typeof twitterOauth !== 'undefined' && Object.keys(twitterOauth).length >= 4) {
   client = new Twitter(twitterOauth);
 } else {
   throw new Meteor.Error(
     'NoTwitterSettings',
-    'It seems you may have forgotten to specify your twitter keys in settings.json',
+    'It seems you may have missed one of the 4 required properties or have forgotten to specify your twitter access all together keys in settings.json',
   );
 }
 
-export const postTwitterStatus = async (text: string) => {
+export const postTwitterStatus = async (text: string): Promise<void> => {
   text = await markdownToTweet(text);
   text = text.replace(/(<)|(>)/g, '');
   try {

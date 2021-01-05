@@ -1,20 +1,20 @@
 import { Mongo } from 'meteor/mongo';
 
-const Settings = new Mongo.Collection('persistent-settings');
+const Settings = new Mongo.Collection<any>('persistent-settings');
 
 export default class PersistentSettings<T extends { [P in keyof T]: string | number | boolean | Date}> {
-  constructor(public id: string = 'default') {}
+  constructor (public id: string = 'default') {}
 
-  public get<K extends keyof T>(key: K): T[K] {
+  public get<K extends keyof T>(key: K): T[K] | undefined {
     const record = Settings.findOne({ _id: this.id }) as T;
-    return record && record[key];
+    return record?.[key];
   }
 
-  public set<K extends keyof T>(key: K, value: T[K]) {
+  public set<K extends keyof T>(key: K, value: T[K]): void {
     Settings.upsert({ _id: this.id }, { $set: { [key]: value } });
   }
 
-  public delete<K extends keyof T>(key: K) {
+  public delete<K extends keyof T>(key: K): void {
     Settings.upsert({ _id: this.id }, { $unset: { [key]: '' } });
   }
 }

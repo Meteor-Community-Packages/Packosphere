@@ -52,7 +52,8 @@
       "comma-dangle": [
         2,
         "always-multiline"
-      ]
+      ],
+      "no-void": "off"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
