@@ -69,6 +69,15 @@
     },
     "settings": {}
   },
+  "browserslist": {
+    "developent": [
+      "last 1 version"
+    ],
+    "production": [
+      "> 1%",
+      "ie 10"
+    ]
+  },
   "meteor": {
     "mainModule": {
       "client": "client/main.tsx",

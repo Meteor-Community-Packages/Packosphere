@@ -8,15 +8,15 @@ module.exports = (ctx) => {
             },
         };
 
-        if (ctx.env === 'production') {
-            // "autoprefixer" is reported to be slow,
-            // so we use it only in production.
-            config.plugins.autoprefixer = {
-                browsers: [
-                    'defaults',
-                ],
-            };
-        }
+        // if (ctx.env === 'production') {
+        //     // "autoprefixer" is reported to be slow,
+        //     // so we use it only in production.
+        //     config.plugins.autoprefixer = {
+        //         browsers: [
+        //             'defaults',
+        //         ],
+        //     };
+        // }
 
         return config;
     }
