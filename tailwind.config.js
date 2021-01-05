@@ -1,6 +1,7 @@
 module.exports = {
   purge: [
-    './client/**/*.jsx',
+    './imports/client/**/*.tsx',
+    './client/**/*.html',
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -11,4 +12,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};
