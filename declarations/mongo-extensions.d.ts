@@ -1,9 +1,8 @@
-import { Grapher } from 'meteor/cultofcoders:grapher'
-import { Mongo } from 'meteor/mongo'
-import { DocumentNode } from 'graphql'
-import SimplSchema from 'simpl-schema'
+import { Grapher } from 'meteor/cultofcoders:grapher';
+import { DocumentNode } from 'graphql';
+import SimplSchema from 'simpl-schema';
 
-type LocalUnarray<T> = T extends Array<infer U> ? U : T
+type LocalUnarray<T> = T extends Array<infer U> ? U : T;
 
 declare module 'meteor/mongo' {
 
@@ -51,40 +50,40 @@ declare module 'meteor/mongo' {
       schema: SimplSchema
 
       // simpl-schema
-      attachSchema(schema: SimplSchema): void
+      attachSchema: (schema: SimplSchema) => void
 
       // simpl-schema
-      attachJSONSchema(schema: unknown): void
+      attachJSONSchema: (schema: unknown) => void
 
-      helpers(methods: Record<string, unknown>): void
+      helpers: (methods: Record<string, unknown>) => void
 
       _name: string
 
       // herteby:denormalize
-      cache<P>(options: CacheOptions<P, T>): void
+      cache: <P>(options: CacheOptions<P, T>) => void
 
       // herteby:denormalize
-      cacheField<P>(options: CacheFieldOptions<P, T>): void
+      cacheField: <P>(options: CacheFieldOptions<P, T>) => void
 
       // matb33:collection-hooks
       before: {
-        find(
+        find: (
           hook: (
             userId: string,
             selector: Mongo.Selector<T>,
             options: CollectionHooks.ModifierOptions,
           ) => void,
-        ): void
-        findOne(
+        ) => void
+        findOne: (
           hook: (
             userId: string,
             selector: Mongo.Selector<T>,
             options: CollectionHooks.ModifierOptions,
           ) => void,
-        ): void
-        insert(hook: (userId: string, doc: T) => void): void
-        remove(hook: (userId: string, doc: T) => void): void
-        update(
+        ) => void
+        insert: (hook: (userId: string, doc: T) => void) => void
+        remove: (hook: (userId: string, doc: T) => void) => void
+        update: (
           hook: (
             userId: string,
             doc: T,
@@ -92,8 +91,8 @@ declare module 'meteor/mongo' {
             modifier: Mongo.Modifier<T>,
             options: CollectionHooks.ModifierOptions,
           ) => void,
-        ): void
-        upsert(
+        ) => void
+        upsert: (
           hook: (
             userId: string,
             doc: T,
@@ -101,30 +100,30 @@ declare module 'meteor/mongo' {
             modifier: Mongo.Modifier<T>,
             options: CollectionHooks.ModifierOptions,
           ) => void,
-        ): void
+        ) => void
       }
 
       // matb33:collection-hooks
       after: {
-        find(
+        find: (
           hook: (
             userId: string,
             selector: Mongo.Selector<T>,
             options: CollectionHooks.ModifierOptions,
             cursor: Mongo.Cursor<T>,
           ) => void,
-        ): void
-        findOne(
+        ) => void
+        findOne: (
           hook: (
             userId: string,
             selector: Mongo.Selector<T>,
             options: CollectionHooks.ModifierOptions,
             doc: T,
           ) => void,
-        ): void
-        insert(hook: (userId: string, doc: T) => void): void
-        remove(hook: (userId: string, doc: T) => void): void
-        update(
+        ) => void
+        insert: (hook: (userId: string, doc: T) => void) => void
+        remove: (hook: (userId: string, doc: T) => void) => void
+        update: (
           hook: (
             userId: string,
             doc: T,
@@ -133,8 +132,8 @@ declare module 'meteor/mongo' {
             options: CollectionHooks.ModifierOptions,
           ) => void,
           options?: CollectionHooks.HookOptionValue,
-        ): void
-        upsert(
+        ) => void
+        upsert: (
           hook: (
             userId: string,
             doc: T,
@@ -142,91 +141,86 @@ declare module 'meteor/mongo' {
             modifier: Mongo.Modifier<T>,
             options: CollectionHooks.ModifierOptions,
           ) => void,
-        ): void
+        ) => void
       }
 
       // matb33:collection-hooks
       direct: {
-        find(
+        find: (
           selector?:
-            | Mongo.Selector<T>
-            | Mongo.ObjectID
-            | string,
+          | Mongo.Selector<T>
+          | Mongo.ObjectID
+          | string,
           options?: {
             sort?: Mongo.SortSpecifier
             skip?: number
             limit?: number
             fields?: Mongo.FieldSpecifier
             reactive?: boolean
-            transform?(doc: any): void
+            transform?: (doc: any) => void
           },
-        ): Mongo.Cursor<T>
-        findOne(
+        ) => Mongo.Cursor<T>
+        findOne: (
           selector?:
-            | Mongo.Selector<T>
-            | Mongo.ObjectID
-            | string,
+          | Mongo.Selector<T>
+          | Mongo.ObjectID
+          | string,
           options?: {
             sort?: Mongo.SortSpecifier
             skip?: number
             fields?: Mongo.FieldSpecifier
             reactive?: boolean
-            transform?(doc: any): void
+            transform?: (doc: any) => void
           },
-        ): T
-        insert(doc: T, callback?: () => void): string
-        remove(
+        ) => T
+        insert: (doc: T, callback?: () => void) => string
+        remove: (
           selector:
-            | Mongo.Selector<T>
-            | Mongo.ObjectID
-            | string,
+          | Mongo.Selector<T>
+          | Mongo.ObjectID
+          | string,
           callback?: () => void,
-        ): number
-        update(
+        ) => number
+        update: (
           selector:
-            | Mongo.Selector<T>
-            | Mongo.ObjectID
-            | string,
+          | Mongo.Selector<T>
+          | Mongo.ObjectID
+          | string,
           modifier: Mongo.Modifier<T>,
           options?: {
             multi?: boolean
             upsert?: boolean
           },
           callback?: () => void,
-        ): number
-        upsert(
+        ) => number
+        upsert: (
           selector:
-            | Mongo.Selector<T>
-            | Mongo.ObjectID
-            | string,
+          | Mongo.Selector<T>
+          | Mongo.ObjectID
+          | string,
           modifier: Mongo.Modifier<T>,
           options?: {
             multi?: boolean
           },
           callback?: () => void,
-        ): { numberAffected?: number; insertedId?: string }
+        ) => { numberAffected?: number, insertedId?: string }
       }
 
       // matb33:collection-hooks
       hookOptions: CollectionHooks.GlobalHookOptions
 
       // cult-of-coders:grapher
-      astToQuery(
+      astToQuery: (
         ast: DocumentNode,
         query: Grapher.GraphQLQuery<T extends object ? T : {}>
-      ): Mongo.Cursor<T>
-      createQuery<T>(
-        name: 'string',
-        body: Grapher.Body<T> | {},
-        options?: {}
-      ): Grapher.Query<T>
-      createQuery<T>(
-        body: Grapher.Body<T> | {},
-        options?: {}
-      ): Grapher.Query<T>
+      ) => Mongo.Cursor<T>
+      createQuery: {
+        <T>(name: 'string', body: Grapher.Body<T> | {}, options?: {}): void
+        <T>(body: Grapher.Body<T> | {}, options?: {}): Grapher.Query<T>
+      }
       expose: Grapher.Exposure
-      addLinks(links: Grapher.Link): void
-      addReducers(): void
+      addLinks: (links: Grapher.Link) => void
+      addReducers: () => void
     }
   }
 }

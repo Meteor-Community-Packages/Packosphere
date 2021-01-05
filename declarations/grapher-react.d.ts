@@ -1,1 +1,1 @@
-declare module 'meteor/cultofcoders:grapher-react'
+declare module 'meteor/cultofcoders:grapher-react';

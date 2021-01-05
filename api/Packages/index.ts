@@ -25,7 +25,7 @@ Packages.createQuery<IPackageQueryResult>('recentlyPublishedPackages', {
       lastUpdated: -1,
     },
     limit: 10,
-  }
+  },
 });
 
 export { Packages };

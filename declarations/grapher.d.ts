@@ -1,16 +1,15 @@
 declare module 'meteor/cultofcoders:grapher' {
-  import { Mongo } from 'meteor/mongo'
-  import { DocumentNode } from 'graphql'
+  import { Mongo } from 'meteor/mongo';
 
   module Grapher {
-    type TypesEnum = 'one' | 'many'
+    type TypesEnum = 'one' | 'many';
 
     interface Query<T> {
-      setParams(): any
-      resolve(): any
-      expose(): any
-      fetch(): T[]
-      fetchOne(): T
+      setParams: () => any
+      resolve: () => any
+      expose: () => any
+      fetch: () => T[]
+      fetchOne: () => T
     } // WIP
 
     interface ILink<TSchema> {
@@ -29,38 +28,37 @@ declare module 'meteor/cultofcoders:grapher' {
       denormalize?: iDenormalize
     }
 
-
-    type Link<TSchema = {}> = {
+    interface Link<TSchema = {}> {
       [field: string]: ILink<TSchema>
     }
 
-    type QueryOptions<T = any> = {
+    interface QueryOptions<T = any> {
       $filter?: Mongo.FieldExpression<T>
     }
-    type RecursiveRecord<T> = { [K in keyof T]: T[K] extends {} ? RecursiveRecord<T[K]> : 1 }
+    type RecursiveBody<T> = { [K in keyof T]: T[K] extends object ? RecursiveBody<T[K]> : BodyEnum };
     type Body<T> = {
-      [field: string]: DependencyGraph | Body<T> | QueryOptions<T>
-    } & Partial<RecursiveRecord<T>>
+      [field: string]: DependencyGraph | QueryOptions<T>
+    } & Partial<RecursiveBody<T>>;
     type createQuery<T = {}> = (
       name: string,
       body: Body<T> | {},
       options?: {}
-    ) => any
+    ) => any;
 
-    type QueryBody<T = {}> = Body<T>
+    type QueryBody<T = {}> = Body<T>;
 
-    type BodyEnum = 0 | 1
+    type BodyEnum = 0 | 1;
 
     type GrapherBody<TSchema = {}> = TSchema extends object
       ? SelectionSet<GraphQLQuery<TSchema>>
-      : SelectionSet<BodyEnum>
+      : SelectionSet<BodyEnum>;
 
-    type TEmbodyArgs<TArgs, TSchema = {}> = {
+    interface TEmbodyArgs<TArgs, TSchema = {}> {
       body: GrapherBody<TSchema>
-      getArgs(): TArgs
+      getArgs: () => TArgs
     }
 
-    type DependencyGraph = {
+    interface DependencyGraph {
       [field: string]: GrapherBody | DependencyGraph
     }
 
@@ -68,7 +66,7 @@ declare module 'meteor/cultofcoders:grapher' {
       filters: TFilters,
       options: TOptions,
       userId: string
-    ) => void
+    ) => void;
 
     interface SelectionSet<BodyType> {
       [field: string]: BodyType
@@ -93,7 +91,7 @@ declare module 'meteor/cultofcoders:grapher' {
     }
 
     interface Exposure<TBody = {}, TFilters = {}, TOptions = {}> {
-      firewall?: TFirewall<TFilters, TOptions> | TFirewall<TFilters, TOptions>[]
+      firewall?: TFirewall<TFilters, TOptions> | Array<TFirewall<TFilters, TOptions>>
       publication?: boolean // Boolean
       method?: boolean // Boolean
       blocking?: boolean // Boolean
@@ -109,28 +107,27 @@ declare module 'meteor/cultofcoders:grapher' {
     }
   }
 
-  export function createQuery <T>(
+  export function createQuery <T> (
     body: Grapher.Body<T> | {},
     options?: {}
-  ): Grapher.Query<T>
+  ): Grapher.Query<T>;
 
-  export function createQuery <T>(
+  export function createQuery <T> (
     name: string,
     body: Grapher.Body<T> | {},
     options?: {}
-  ): Grapher.Query<T>
+  ): Grapher.Query<T>;
 
-  export function setAstToQueryDefaults(
+  export function setAstToQueryDefaults (
     options: Grapher.ASTToQueryOptions
-  ): void
-
+  ): void;
 
   export const db: Readonly<{
     [key: string]: Mongo.CollectionStatic
-  }>
+  }>;
 
   export class MemoryResultCacher {
-    constructor({ ttl }: { ttl: number })
+    constructor ({ ttl }: { ttl: number })
 
     public fetch<TResult = {}>(
       cacheId: string,
