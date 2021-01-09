@@ -28,7 +28,7 @@ export default ({ links }: HeaderProps): JSX.Element => (
       <hr className="m-2" />
       <ul className="flex space-x-5 md:space-x-4 lg:space-x-8 font-semibold from-yellow-400 via- via-yellow-500 bg-gradient-to-b bg-yellow-800 bg-clip-text text-gray-500">
         {links.map(({ url, title }) => (
-          <a href={url} className="hover:text-transparent"><li className="">{title}</li></a>
+          <a href={url} className="hover:text-transparent" key={title}><li className="">{title}</li></a>
         ))}
       </ul>
     </div>

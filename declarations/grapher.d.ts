@@ -1,10 +1,20 @@
 declare module 'meteor/cultofcoders:grapher' {
+  import { Meteor } from 'meteor/meteor';
   import { Mongo } from 'meteor/mongo';
 
   module Grapher {
     type TypesEnum = 'one' | 'many';
 
+    type onReadyCallback = () => void;
+    type onStopCallback = (err: Meteor.Error | undefined) => void;
+    interface subscriptionCallbacks {
+      onReady: onReadyCallback
+      onStop: onStopCallback
+    }
+
     interface Query<T> {
+      clone: (params?: object) => Query<T>
+      subscribe: (cb: onReadyCallback | subscriptionCallbacks) => Meteor.SubscriptionHandle
       setParams: () => any
       resolve: () => any
       expose: () => any
@@ -20,9 +30,9 @@ declare module 'meteor/cultofcoders:grapher' {
 
     interface ILink<TSchema> {
       collection: Mongo.Collection<TSchema>
-      type: TypesEnum
+      type?: TypesEnum
       metadata?: true
-      field: string
+      field?: string
       foreignIdentityField?: string
       index?: boolean
       denormalize?: iDenormalize
