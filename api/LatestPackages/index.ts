@@ -5,7 +5,7 @@ import { Packages } from '../Packages';
 
 const { LatestPackages } = PackageServer;
 
-export interface ILatestPackageQueryResult extends LatestPackage {
+export interface ILatestPackagesQueryResult extends LatestPackage {
   meta: Package
 }
 
@@ -20,7 +20,7 @@ Meteor.startup(() => {
   });
 });
 
-const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackageQueryResult>('recentlyPublishedPackages', {
+const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQueryResult>('recentlyPublishedPackages', {
   published: 1,
   packageName: 1,
   description: 1,
