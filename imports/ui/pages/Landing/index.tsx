@@ -16,14 +16,12 @@ const headerLinks = [
 const query = QRecentlyPublishedPackages.clone();
 export default (): JSX.Element => {
   const { data, ready } = useQuery(query);
-  console.log(data);
   return (
     <>
       <Header links={headerLinks} />
-
       <main className="container flex flex-col space-y-10 mx-auto py-10">
-        <h2 className="text-2xl text-blueGray-600 text-center">Recently Published</h2>
-        <section>{ready && <CardGrid cardData={data} />}</section>
+        <h2 className="text-2xl text-white text-center">Recently Published</h2>
+        <section className="px-4 sm:px-0">{ready && <CardGrid cardData={data} />}</section>
       </main>
     </>
   );
