@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Search } from 'heroicons-react';
+
 export interface HeaderLink {
   title: string
   url: string
@@ -33,11 +35,11 @@ export default ({ links }: HeaderProps): JSX.Element => (
         </div>
       </div>
       <div className="flex items-center space-x-5">
-        <span className="from-yellow-700 to-yellow-600 bg-gradient-to-t rounded-full flex-shrink py-3 px-6 inline-flex lg:flex-grow items-center">
+        <span className="from-yellow-700 to-yellow-600 bg-gradient-to-t bg-opacity-80 rounded-md flex-shrink py-1 px-6 pr-4 inline-flex lg:flex-grow items-center">
           <input type="text" className="bg-transparent outline-none w-full text-white flex-grow flex-shrink text-xl placeholder-gray-100" placeholder="Search Packages" />
-          <svg className="w-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-          </svg>
+          <button className="w-10 h-10 flex items-center justify-center flex-shrink-0 rounded-full focus:outline-none focus:bg-yellow-600 hover:bg-yellow-600">
+            <Search size={18} />
+          </button>
         </span>
         <div className="flex items-center justify-center flex-shrink-0">
           <img src="https://ca.slack-edge.com/TNJ4JE5U6-UNHPNU2B1-g4c5d9c8611d-48" className="w-11 h-11 rounded-full ring-2 ring-yellow-600 ring-offset-2 flex-shrink-0" />
