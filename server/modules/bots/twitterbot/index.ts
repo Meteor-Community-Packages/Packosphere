@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
 import Twitter, { AccessTokenOptions } from 'twitter';
-import markdownToTweet from 'markdown-to-tweet';
 
 const twitterOauth: AccessTokenOptions = Meteor.settings?.twitter;
 let client: Twitter;
@@ -16,7 +15,6 @@ if (typeof twitterOauth !== 'undefined' && Object.keys(twitterOauth).length >= 4
 }
 
 export const postTwitterStatus = async (text: string): Promise<void> => {
-  text = await markdownToTweet(text);
   text = text.replace(/(<)|(>)/g, '');
   try {
     await client.post('statuses/update', { status: text });

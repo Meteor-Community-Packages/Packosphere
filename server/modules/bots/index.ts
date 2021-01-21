@@ -25,9 +25,11 @@ const batchAnnouncePackageUpdates = (): void => {
   if (updatedPackages.count() > 0) {
     updatedPackages.forEach((doc) => {
       const { packageName, version } = doc;
-      const newText = `\`${packageName}@${version}\`\n${makeAtmosphereLink(packageName)}\n\n`;
-      twitterText += newText;
-      slackText += newText;
+      const twitterVersion = `${packageName}@${version}\n`;
+      const slackVersion = `\`${packageName}@${version}\`\n`;
+      const link = `${makeAtmosphereLink(packageName)}\n\n`;
+      twitterText += twitterVersion + link;
+      slackText += slackVersion + link;
       if (twitterText.length > 160) {
         void postTwitterStatus(`New Package Releases:\n\n${twitterText}`);
         twitterText = '';
@@ -53,20 +55,25 @@ if (Meteor.isProduction) {
     LatestPackages.after.update((userId: string, doc: LatestPackage) => {
       const { packageName, lastUpdated, published } = doc;
       if (lastUpdated.getTime() !== published.getTime()) {
-        const text = `Metadata Update: \`${packageName}\`\n\n${makeAtmosphereLink(packageName)}`;
+        const beginning = 'Metadata Update:';
+        const twitterText = `${packageName}\n\n`;
+        const slackText = ` \`${packageName}\`\n\n`;
+        const link = `${makeAtmosphereLink(packageName)}`;
 
-        void postToSlack(text);
-        void postTwitterStatus(text);
+        void postToSlack(beginning + slackText + link);
+        void postTwitterStatus(beginning + twitterText + link);
       }
     }, { fetchPrevious: false });
 
     ReleaseVersions.after.insert((userId: string, doc: ReleaseVersion) => {
       const { track, version } = doc;
       if (track === 'METEOR') {
-        const text = `New Meteor Release: \`${track}@${version}\``;
+        const beginning = 'New Meteor Release:';
+        const slackText = `\`${track}@${version}\``;
+        const twitterText = `${track}@${version}`;
 
-        void postToSlack(text);
-        void postTwitterStatus(text);
+        void postToSlack(beginning + slackText);
+        void postTwitterStatus(beginning + twitterText);
       }
     });
 
@@ -75,10 +82,13 @@ if (Meteor.isProduction) {
 
       const { recommended: previousRecommend } = this.previous;
       if (recommended !== previousRecommend && recommended) {
-        const text = `\`${track}@${version}\` is now a recommended release. 🎉 \n\nTime to update your apps!`;
+        const slackText = `\`${track}@${version}\``;
+        const twitterText = `${track}@${version}`;
 
-        void postToSlack(text);
-        void postTwitterStatus(text);
+        const ending = ' is now a recommended release. 🎉 \n\nTime to update your apps!';
+
+        void postToSlack(slackText + ending);
+        void postTwitterStatus(twitterText + ending);
       }
     });
   });
