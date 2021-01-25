@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Action } from 'history';
 import queryString from 'query-string';
 import { ArrowNarrowRight, ArrowNarrowLeft } from 'heroicons-react';
 import Header from '../../components/Header';
@@ -27,7 +26,7 @@ interface LinkOrNotProps {
 const LinkOrNot = ({ link, to, children, ...props }: LinkOrNotProps): JSX.Element => {
   return link
     ? <Link to={to} {...props} >{children}</Link>
-    : <span {...props}>{children}</span>;
+    : <span className='text-blueGray-600' {...props}>{children}</span>;
 };
 
 const Pagination = ({ totalPages = 1 }: PaginationProps): JSX.Element => {
