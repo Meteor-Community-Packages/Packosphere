@@ -35,4 +35,28 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
   },
 });
 
-export { LatestPackages, QRecentlyPublishedPackages };
+const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('packageSearch', {
+  $filters: {
+    unmigrated: { $exists: false },
+    $text: { $search: '' },
+  },
+  $filter: ({ filters, options, params }: any) => {
+    if (typeof params.query !== 'undefined') {
+      filters.$text.$search = params.query;
+    }
+  },
+  $options: {
+    sort: { score: { $meta: 'textScore' } },
+    limit: 10,
+  },
+  $paginate: true,
+  packageName: 1,
+  published: 1,
+  description: 1,
+  meta: {
+    totalAdds: 1,
+  },
+  score: { $meta: 'textScore' },
+});
+
+export { LatestPackages, QRecentlyPublishedPackages, QPackageSearch };

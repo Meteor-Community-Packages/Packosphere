@@ -1,8 +1,3 @@
-import { Packages, QRecentlyPublishedPackages } from '../../../api';
+import { Packages } from '../../../api';
 
-QRecentlyPublishedPackages.expose({
-  firewall () {
-    return true;
-  },
-});
 export { Packages };

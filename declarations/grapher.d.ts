@@ -17,9 +17,13 @@ declare module 'meteor/cultofcoders:grapher' {
       subscribe: (cb: onReadyCallback | subscriptionCallbacks) => Meteor.SubscriptionHandle
       setParams: () => any
       resolve: () => any
-      expose: () => any
-      fetch: () => T[]
-      fetchOne: () => T
+      expose: (exposure: Exposure) => void
+      fetch: (callback?: (error: Meteor.Error, data: T[]) => void) => T[]
+      fetchOne: (callback?: (error: Meteor.Error, data: T) => void) => T
+      fetchSync: () => Promise<T[]>
+      fetchOneSync: () => Promise<T>
+      getCount: (callback?: (error: Meteor.Error, count: number) => void) => number
+      getCountSync: () => Promise<number>
     } // WIP
 
     interface ILink<TSchema> {

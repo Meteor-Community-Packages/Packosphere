@@ -2,7 +2,7 @@
   "name": "packosphere",
   "private": true,
   "scripts": {
-    "start": "meteor run --settings ./settings.json",
+    "start": "meteor run --exclude-archs web.browser.legacy --settings ./settings.json",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --settings ./settings.json --production --extra-packages bundle-visualizer"
@@ -15,6 +15,7 @@
     "human-number": "^1.0.6",
     "meteor-node-stubs": "^1.0.1",
     "prop-types": "15.7.2",
+    "query-string": "^6.13.8",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
