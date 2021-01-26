@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import { ArrowNarrowRight, ArrowNarrowLeft } from 'heroicons-react';
+import { ArrowNarrowRight, ArrowNarrowLeft, Refresh } from 'heroicons-react';
 import Header from '../../components/Header';
 import Page from '../../components/Page';
 import CardGrid from '../../components/CardGrid';
@@ -73,9 +73,10 @@ export default (): JSX.Element => {
   const { q, page = '1' } = search;
   const skip = (parseInt(page as string) - 1) * resultsPerPage;
 
-  const { data, count } = useQuery({ query: QPackageSearch, params: { query: q, limit: resultsPerPage, skip }, config: { fetchTotal: true } });
+  const { data, count, loading } = useQuery({ query: QPackageSearch, params: { query: q, limit: resultsPerPage, skip }, config: { fetchTotal: true } });
   const dataCount = typeof count !== 'undefined' ? count : data.length;
   const totalPages = Math.ceil(dataCount / resultsPerPage);
+  const showLoader = loading ? '' : 'hidden';
   return (
     <>
       <Header />
@@ -83,8 +84,11 @@ export default (): JSX.Element => {
         <>
           <section className="flex justify-between items-center">
             <h2 className="text-xl text-white">Results for <span className="text-yellow-600 italic">{q}</span></h2>
-            <aside>
-              <Pagination totalPages={totalPages}/>
+            <aside className="flex items-center space-x-3">
+              <span className={`animate-spin rounded-full text-blueGray-400 ${showLoader}`}>
+                <Refresh size={22} className="h-6 w-6" style={{ transform: 'scaleX(-1)' }}/>
+              </span>
+              <Pagination totalPages={totalPages} />
             </aside>
           </section>
           <section>{typeof data !== 'undefined' && <CardGrid cardData={data} />}</section>
