@@ -24,3 +24,6 @@ cultofcoders:grapher-react@0.1.5
 copleykj:grapher-link-executor
 peerlibrary:meteor-packages
 hexsprite:postcss
+accounts-meteor-developer
+service-configuration
+staringatlights:fast-render

@@ -1,7 +1,10 @@
+import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
+import gravatar from 'gravatar';
 import { Link } from 'react-router-dom';
-import { Search } from 'heroicons-react';
+import { Search, Login } from 'heroicons-react';
 import useSearchQuery from '../../hooks/useSearchQuery';
+import { useTracker } from 'meteor/react-meteor-data';
 
 const links = [
   { title: 'About', url: '' },
@@ -13,7 +16,14 @@ const links = [
 
 export default (): JSX.Element => {
   const [locationQuery, setLocationQuery] = useSearchQuery();
-  const [searchState, setSearchState] = useState(locationQuery.q as string);
+  const q = typeof locationQuery.q === 'string' ? locationQuery.q : '';
+  const [searchState, setSearchState] = useState(q);
+
+  const user = useTracker(() => {
+    return Meteor.user();
+  });
+
+  const userImage = gravatar.url(user?.services?.['meteor-developer'].emails[0].address, { s: '100', r: 'pg', d: 'https://avatars.slack-edge.com/2019-11-22/846109315856_16870da10c58e584b545_88.png' }, true);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -24,6 +34,9 @@ export default (): JSX.Element => {
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     setSearchState(e.target.value);
+  };
+  const loginHandler = (): void => {
+    Meteor.loginWithMeteorDeveloperAccount();
   };
   return (
     <header className="px-4 bg-gradient-to-t from-blueGray-800 to-blueGray-900 text-white">
@@ -50,7 +63,7 @@ export default (): JSX.Element => {
         </Link>
         <div className="flex items-center space-x-5">
           <span className="from-yellow-700 to-yellow-600 bg-gradient-to-t rounded-md flex-shrink py-1 px-6 pr-4 inline-flex lg:flex-grow items-center">
-            <form onSubmit={submitHandler} className="flex items-center">
+            <form onSubmit={submitHandler} className="flex items-center" autoComplete="off">
               <input type="text" name='search' onChange={changeHandler} value={searchState} className="bg-transparent outline-none w-full text-white flex-grow flex-shrink text-xl placeholder-gray-100" placeholder="Search Packages" />
               <button className="w-10 h-10 flex items-center justify-center flex-shrink-0 rounded-full focus:outline-none focus:bg-yellow-600 hover:bg-yellow-600">
                 <Search size={18} />
@@ -58,7 +71,12 @@ export default (): JSX.Element => {
             </form>
           </span>
           <div className="flex items-center justify-center flex-shrink-0">
-            <img src="https://ca.slack-edge.com/TNJ4JE5U6-UNHPNU2B1-g4c5d9c8611d-48" className="w-11 h-11 rounded-full ring-2 ring-yellow-600 ring-offset-2 flex-shrink-0" />
+            {Meteor.userId() !== null
+              ? <img src={userImage} className="w-11 h-11 rounded-full ring-2 ring-yellow-600 ring-offset-2 flex-shrink-0" />
+              : <button onClick={loginHandler} title="Log In" className="flex items-center justify-center w-10 h-10 rounded-full ring-4 ring-blueGray-500 bg-blueGray-600 flex-shrink-0 focus:outline-none" >
+                <Login size={22} />
+              </button>
+            }
           </div>
         </div>
       </div>
