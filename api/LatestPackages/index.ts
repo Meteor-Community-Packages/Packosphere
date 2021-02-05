@@ -27,6 +27,7 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
   description: 1,
   meta: {
     totalAdds: 1,
+    maintainers: 1,
   },
   $options: {
     sort: {
@@ -57,6 +58,7 @@ const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('p
   description: 1,
   meta: {
     totalAdds: 1,
+    maintainers: 1,
   },
   score: { $meta: 'textScore' },
 });
