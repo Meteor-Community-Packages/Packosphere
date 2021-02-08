@@ -43,9 +43,10 @@ declare module 'meteor/peerlibrary:meteor-packages' {
       treeHash: string
       // [key: string]: any;
     }
-    readme: {
+    readme?: {
       url: string
       hash: string
+      fullText?: string
       // [key: string]: any;
     }
     dependencies: Array<{

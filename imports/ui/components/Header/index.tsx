@@ -58,7 +58,7 @@ export default (): JSX.Element => {
           </span>
           <div className="flex flex-col">
             <p className="text-sm">Meteor Community</p>
-            <h1 className="text-3xl font-semibold">Packosphere</h1>
+            <p className="text-3xl font-semibold">Packosphere</p>
           </div>
         </Link>
         <div className="flex items-center space-x-5">

@@ -29,3 +29,4 @@ service-configuration@1.0.11
 staringatlights:fast-render
 hot-module-replacement
 react-fast-refresh
+check

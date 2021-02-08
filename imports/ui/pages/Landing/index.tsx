@@ -8,7 +8,7 @@ import Page from '../../components/Page';
 
 const query = QRecentlyPublishedPackages.clone();
 export default (): JSX.Element => {
-  const { data, ready } = useQuery(query);
+  const { data, ready } = useQuery({ query });
   return (
     <>
       <Header />
