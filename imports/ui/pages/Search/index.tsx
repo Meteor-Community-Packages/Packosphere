@@ -52,7 +52,7 @@ const Pagination = ({ totalPages = 1 }: PaginationProps): JSX.Element => {
   );
 };
 
-export default (): JSX.Element => {
+const SearchPage = (): JSX.Element => {
   const history = useHistory();
   useEffect(() => {
     // XXX - Figure out how to type this nightmare.
@@ -100,3 +100,5 @@ export default (): JSX.Element => {
     </>
   );
 };
+
+export default SearchPage;

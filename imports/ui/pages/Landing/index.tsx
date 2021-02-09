@@ -7,7 +7,7 @@ import { QRecentlyPublishedPackages } from '../../../../api/LatestPackages';
 import Page from '../../components/Page';
 
 const query = QRecentlyPublishedPackages.clone();
-export default (): JSX.Element => {
+const LandingPage = (): JSX.Element => {
   const { data, ready } = useQuery({ query });
   return (
     <>
@@ -21,3 +21,5 @@ export default (): JSX.Element => {
     </>
   );
 };
+
+export default LandingPage;

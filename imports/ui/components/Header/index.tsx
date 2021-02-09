@@ -14,7 +14,7 @@ const links = [
   { title: 'Contact', url: '' },
 ];
 
-export default (): JSX.Element => {
+const HeaderComponent = (): JSX.Element => {
   const [locationQuery, setLocationQuery] = useLocationQuery();
   const q = typeof locationQuery.q === 'string' ? locationQuery.q : '';
   const [searchState, setSearchState] = useState(q);
@@ -83,3 +83,5 @@ export default (): JSX.Element => {
     </header>
   );
 };
+
+export default HeaderComponent;

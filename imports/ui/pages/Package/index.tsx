@@ -98,4 +98,4 @@ const PackagePage = (): JSX.Element => {
   );
 };
 
-export { PackagePage as default };
+export default PackagePage;

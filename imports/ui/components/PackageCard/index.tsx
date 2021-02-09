@@ -17,7 +17,7 @@ const mapper = (n: number): string => {
   return ns;
 };
 
-export default ({ cardData: { packageName, meta: { totalAdds, maintainers }, description } }: PackageCardProps): JSX.Element => {
+const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, maintainers }, description } }: PackageCardProps): JSX.Element => {
   let username = 'meteor';
   let packagename;
 
@@ -56,3 +56,5 @@ export default ({ cardData: { packageName, meta: { totalAdds, maintainers }, des
     </Link>
   );
 };
+
+export default PackageCardComponent;

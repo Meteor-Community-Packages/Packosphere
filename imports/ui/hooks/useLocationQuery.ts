@@ -11,7 +11,7 @@ interface setSearchQueryParams {
   overwrite?: boolean
 }
 
-export default (): [UrlQueryObject, (options: setSearchQueryParams) => void] => {
+const useLocationQuery = (): [UrlQueryObject, (options: setSearchQueryParams) => void] => {
   const location = useLocation();
   const history = useHistory();
   const { search } = location;
@@ -27,3 +27,5 @@ export default (): [UrlQueryObject, (options: setSearchQueryParams) => void] => 
   };
   return [parsed, setSearchQuery];
 };
+
+export default useLocationQuery;

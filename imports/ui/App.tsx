@@ -5,7 +5,7 @@ import PackagePage from './pages/Package';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-export default (): JSX.Element => {
+const App = (): JSX.Element => {
   return (
     <Router>
       <Switch>
@@ -22,3 +22,5 @@ export default (): JSX.Element => {
     </Router>
   );
 };
+
+export default App;
