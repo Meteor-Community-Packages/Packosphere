@@ -786,8 +786,9 @@
 
 .markdown-body img {
   max-width: 100%;
+  display: inline;
   box-sizing: initial;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .markdown-body img[align=right] {
