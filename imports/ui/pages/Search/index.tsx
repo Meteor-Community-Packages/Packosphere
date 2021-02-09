@@ -8,7 +8,7 @@ import CardGrid from '../../components/CardGrid';
 
 import useQuery from '../../hooks/useStaticQuery';
 import { QPackageSearch } from '../../../../api/LatestPackages';
-import useSearchQuery from '../../hooks/useSearchQuery';
+import useLocationQuery from '../../hooks/useLocationQuery';
 
 const resultsPerPage = 10;
 
@@ -30,7 +30,7 @@ const LinkOrNot = ({ link, to, children, ...props }: LinkOrNotProps): JSX.Elemen
 };
 
 const Pagination = ({ totalPages = 1 }: PaginationProps): JSX.Element => {
-  const [search] = useSearchQuery();
+  const [search] = useLocationQuery();
   const { page = '1' } = search;
   const pageNumber = parseInt(page as string);
 
@@ -69,7 +69,7 @@ export default (): JSX.Element => {
 
     return () => { unlisten(); };
   }, []);
-  const [search] = useSearchQuery();
+  const [search] = useLocationQuery();
   const { q, page = '1' } = search;
   const skip = (parseInt(page as string) - 1) * resultsPerPage;
 

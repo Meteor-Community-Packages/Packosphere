@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import gravatar from 'gravatar';
 import { Link } from 'react-router-dom';
 import { Search, Login } from 'heroicons-react';
-import useSearchQuery from '../../hooks/useSearchQuery';
+import useLocationQuery from '../../hooks/useLocationQuery';
 import { useTracker } from 'meteor/react-meteor-data';
 
 const links = [
@@ -15,7 +15,7 @@ const links = [
 ];
 
 export default (): JSX.Element => {
-  const [locationQuery, setLocationQuery] = useSearchQuery();
+  const [locationQuery, setLocationQuery] = useLocationQuery();
   const q = typeof locationQuery.q === 'string' ? locationQuery.q : '';
   const [searchState, setSearchState] = useState(q);
 
