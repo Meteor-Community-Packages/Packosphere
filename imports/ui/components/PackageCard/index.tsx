@@ -31,7 +31,7 @@ const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, main
     <Link to={`/${username}/${packagename}`} className="">
       <li className="flex flex-col h-64 bg-blueGray-700 text-white p-7 border, rounded-md border-gray-300 shadow-lg">
         <h2 className="text-sm font-semibold">
-          <span className="inline-block">{username}:</span>
+          {username !== 'meteor' && <span className="inline-block">{username}:</span> }
           <span className="inline-block">{packagename}</span>
         </h2>
         <p className="text-gray-300 text-sm my-4 break-words flex-auto">{description}</p>
