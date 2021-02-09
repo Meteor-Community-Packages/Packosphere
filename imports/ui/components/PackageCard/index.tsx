@@ -46,7 +46,7 @@ const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, main
                 src="https://avatars.slack-edge.com/2019-11-22/846109315856_16870da10c58e584b545_88.png"
                 alt=""
                 className="w-6 rounded-full ring-white ring-1"
-                title="Commuinty Maintained"
+                title="Community Maintained"
               />
               : null
             }
