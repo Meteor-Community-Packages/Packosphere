@@ -21,7 +21,7 @@ const renderers = {
       'js',
       'javascript',
     ];
-    return <SyntaxHighlighter style={codeStyles} language={language} wrapLongLines showLineNumbers={languages.includes(language)} children={value} />;
+    return <SyntaxHighlighter style={codeStyles} language={language} showLineNumbers={languages.includes(language)} children={value} />;
   },
 };
 
@@ -65,8 +65,8 @@ const PackagePage = (): JSX.Element => {
               <p>{pkg.description}</p>
             </section>
 
-            <section className="flex flex-col space-y-10 lg:space-y-0 lg:flex-row-reverse lg:space-x-reverse lg:space-x-10">
-              <aside className="flex flex-col lg:w-96">
+            <section className="grid gap-10 grid-cols-1 lg:grid-cols-4">
+              <aside className="flex flex-col lg:col-start-4 lg:order-2">
                 <h3 className="text-yellow-500 text-lg mb-4">Installation</h3>
                 <div className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
                   <Terminal size={22} className="flex-none" />
@@ -76,7 +76,7 @@ const PackagePage = (): JSX.Element => {
                 </div>
               </aside>
               {typeof pkg.readme !== 'undefined'
-                ? <article className="markdown-body flex-auto bg-blueGray-700 rounded-md px-5 py-7">
+                ? <article className="markdown-body bg-blueGray-700 rounded-md px-5 py-7 lg:col-end-4 lg:col-start-1 lg:order-1">
                   { typeof pkg.readme.fullText !== 'undefined'
                     ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${pkg.readme?.fullText ?? ''}`} />
                     : <p className="text-2xl text-center">Loading...</p>

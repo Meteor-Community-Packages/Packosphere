@@ -658,8 +658,12 @@
 .markdown-body blockquote {
   padding: .5rem 1em;
   color: #a2b4c8;
-  background-color: #334155;
+  background-color: rgb(40, 54, 78);
   border-left: .25em solid #dfe2e5;
+}
+
+.markdown-body blockquote strong {
+  color: rgb(245, 169, 37);
 }
 
 .markdown-body blockquote>:first-child {
@@ -795,6 +799,7 @@
 }
 
 .markdown-body code {
+  display: inline-block;
   padding: .2em .4em;
   margin: 0;
   font-size: 85%;
@@ -804,7 +809,7 @@
 }
 
 .markdown-body pre {
-  word-wrap: normal;
+  word-wrap: break-word;
 }
 
 .markdown-body pre>code {
