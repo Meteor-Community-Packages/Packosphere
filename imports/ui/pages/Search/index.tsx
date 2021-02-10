@@ -23,7 +23,7 @@ const SearchPage = (): JSX.Element => {
             behavior: 'smooth',
           });
         }
-      }, 300);
+      });
     });
 
     return () => { unlisten(); };

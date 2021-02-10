@@ -12,6 +12,7 @@ import { QPackageInfo } from '../../../../client/api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
 import Header from '../../components/Header';
 import Page from '../../components/Page';
+import { getAgeInYears } from '../../../utils';
 
 const renderers = {
   code: ({ language, value }: { language: string, value: string }) => {
@@ -29,6 +30,27 @@ const PackagePage = (): JSX.Element => {
   const { username, packagename } = useParams<{ username: string, packagename: string }>();
   const { data, refetch } = useQuery({ query: QPackageInfo, params: { username, packageName: packagename } });
   const pkg = data[0];
+  const age = getAgeInYears(pkg?.published);
+
+  let publishedIndicator: string;
+
+  switch (age) {
+    case 0:
+    case 1:
+      publishedIndicator = 'text-blueGray-400';
+      break;
+    case 2:
+      publishedIndicator = 'text-yellow-300';
+      break;
+    case 3:
+      publishedIndicator = 'text-yellow-600 animate-pulse';
+      break;
+    default:
+      publishedIndicator = 'text-red-600 animate-pulse';
+      break;
+  }
+
+  console.log(publishedIndicator);
 
   useEffect(() => {
     Meteor.call('updateExternalPackageData', `${username !== 'meteor' ? `${username}:` : ''}${packagename}`,
@@ -52,12 +74,12 @@ const PackagePage = (): JSX.Element => {
             <section className="flex flex-col space-y-6  pb-3">
               <div className="flex flex-col space-y-2">
                 <h1 className="text-3xl font-semibold">{pkg.packageName}</h1>
-                <p className="text-sm flex space-x-2">
+                <p className="flex space-x-2">
                   <span className="text-blueGray-400">
                     v{pkg.version}
                   </span>
                   <span>&bull;</span>
-                  <span className="text-blueGray-400">
+                  <span className={publishedIndicator}>
                     Published {ago(pkg.published)}
                   </span>
                 </p>
