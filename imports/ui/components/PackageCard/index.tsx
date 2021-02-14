@@ -28,32 +28,34 @@ const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, main
   }
 
   return (
-    <Link to={`/${username}/${packagename}`} className="">
-      <li className="flex flex-col h-64 bg-blueGray-700 text-white p-7 border, rounded-md border-gray-300 shadow-lg">
-        <h2 className="text-sm font-semibold">
-          {username !== 'meteor' && <span className="inline-block">{username}:</span> }
-          <span className="inline-block">{packagename}</span>
-        </h2>
-        <p className="text-gray-300 text-sm my-4 break-words flex-auto">{description}</p>
-        <div className='flex items-center space-x-1 justify-between'>
-          <div className="from-blueGray-700 to-blueGray-600 bg-gradient-to-t px-3 py-1.5 space-x-1 flex items-center rounded-sm text-xs font-semibold text-white">
-            <CloudDownloadOutline size={18} />
-            <span>{typeof totalAdds !== 'undefined' && totalAdds > 0 ? human(totalAdds, mapper) : '0'}</span>
-          </div>
-          <div>
-            {maintainers.some(maintainer => maintainer.username === 'communitypackages')
-              ? <img
-                src="https://avatars.slack-edge.com/2019-11-22/846109315856_16870da10c58e584b545_88.png"
-                alt=""
-                className="w-6 rounded-full ring-white ring-1"
-                title="Community Maintained"
-              />
-              : null
-            }
-          </div>
+    <li className="flex flex-col h-60 bg-blueGray-700 text-white p-7 border, rounded-md border-gray-300 shadow-lg relative">
+      <Link to={`/${username}/${packagename}`} className="absolute top-0 bottom-0 right-0 left-0 z-0" />
+      <h2 className="text-sm font-semibold">
+        {username !== 'meteor' &&
+            <span className="inline-block">
+              <Link to={`/${username}`} className="relative z-10">{username}</Link>:
+            </span>}
+        <span className="inline-block">{packagename}</span>
+      </h2>
+      <p className="text-gray-300 text-sm my-4 break-words flex-auto">{description}</p>
+      <div className='flex items-center space-x-1 justify-between'>
+        <div className="from-blueGray-700 to-blueGray-600 bg-gradient-to-t px-3 py-1.5 space-x-1 flex items-center rounded-sm text-xs font-semibold text-white">
+          <CloudDownloadOutline size={18} />
+          <span>{typeof totalAdds !== 'undefined' && totalAdds > 0 ? human(totalAdds, mapper) : '0'}</span>
         </div>
-      </li>
-    </Link>
+        <div>
+          {maintainers.some(maintainer => maintainer.username === 'communitypackages')
+            ? <img
+              src="https://avatars.slack-edge.com/2019-11-22/846109315856_16870da10c58e584b545_88.png"
+              alt=""
+              className="w-6 rounded-full ring-white ring-1"
+              title="Community Maintained"
+            />
+            : null
+          }
+        </div>
+      </div>
+    </li>
   );
 };
 
