@@ -29,14 +29,12 @@ const withReactiveQuery = function <T>({ query, params = {} }: QueryParams<T>): 
     let data: QueryInfo<T>['data'] = [];
     useEffect(() => {
       queryRef.current = query.clone(params);
-      console.log('using effect');
       setSubscriptionError(null);
       setIsLoading(true);
       setIsReady(false);
       subscriptionHandle.current = queryRef.current?.subscribe({
         onStop (err) {
           if (typeof err !== 'undefined') {
-            console.log('subscriptiong stopped');
             setSubscriptionError(err);
           }
           setIsLoading(false);

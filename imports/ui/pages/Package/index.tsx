@@ -50,14 +50,11 @@ const PackagePage = (): JSX.Element => {
       break;
   }
 
-  console.log(publishedIndicator);
-
   useEffect(() => {
     Meteor.call('updateExternalPackageData', `${username !== 'meteor' ? `${username}:` : ''}${packagename}`,
       (error: Meteor.Error, result: boolean) => {
         if (typeof error === 'undefined') {
           if (result) {
-            console.log('refetching');
             refetch();
           }
         }
