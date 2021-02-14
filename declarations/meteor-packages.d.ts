@@ -17,6 +17,19 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     _id: string
   }
 
+  interface RepoInfo {
+    forks_count: number
+    open_issues: number
+    watchers_count: number
+    fork: boolean
+    updated_at: string
+    language: string
+    stargazers_count: number
+    license: {
+      spdx_id: string
+    }
+  }
+
   interface Package extends Document {
     name: string
     maintainers: Array<{
@@ -28,6 +41,7 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     lastUpdated: Date
     directAdds?: number
     totalAdds?: number
+    repoInfo?: RepoInfo | null
     // [key: string]: any;
   }
 
@@ -133,7 +147,10 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     // [key: string]: any;
   }
 
-  interface LatestPackage extends Version { }
+  interface LatestPackage extends Version {
+    lastFetched?: Date | null
+    lastComputed?: Date
+  }
 
   interface Stat extends Document {
     name: string

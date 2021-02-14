@@ -1,7 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { fetch } from 'meteor/fetch';
+import { RepoInfo } from 'meteor/peerlibrary:meteor-packages';
+import { Octokit } from '@octokit/rest';
+import ParseGitHubUrl from 'parse-github-url';
+import { Packages } from '../Packages';
 import { LatestPackages, QRecentlyPublishedPackages, QPackageSearch, QPackageInfo } from '../../../api';
+
+const MS_IN_1_DAY = 1000 * 24 * 60 * 60;
+
+const GitHub = new Octokit({});
 
 LatestPackages._ensureIndex({
   packageName: 'text',
@@ -34,17 +42,49 @@ QPackageInfo.expose({
 Meteor.methods({
   async updateExternalPackageData (packageName: string) {
     check(packageName, String);
-    const pkg = LatestPackages.findOne({ packageName, 'readme.fullText': { $exists: false } }, { fields: { _id: 1, 'readme.url': 1 } });
+    let clientShouldFetch = false;
+    const updateObj: { $set: { 'readme.fullText'?: string, lastFetched?: Date | null}} = { $set: {} };
 
-    if (typeof pkg !== 'undefined' && typeof pkg.readme !== 'undefined' && typeof pkg.readme.url !== 'undefined') {
-      const response = await fetch(pkg.readme.url);
-      const fullText = await response.text();
-      LatestPackages.update({ _id: pkg._id }, { $set: { 'readme.fullText': fullText } });
+    const pkg = LatestPackages.findOne({
+      packageName,
+    }, {
+      fields: {
+        _id: 1, packageName: 1, 'readme.url': 1, 'readme.fullText': 1, git: 1, lastFetched: 1,
+      },
+    });
 
-      return true;
+    const { owner, name: repo } = ParseGitHubUrl(pkg?.git ?? '') ?? { owner: null, name: null };
+
+    if (typeof pkg !== 'undefined') {
+      if (typeof pkg.readme !== 'undefined' && typeof pkg.readme?.fullText === 'undefined' && typeof pkg.readme.url !== 'undefined') {
+        const response = await fetch(pkg.readme.url);
+        updateObj.$set['readme.fullText'] = await response.text();
+        clientShouldFetch = true;
+      }
+
+      if (pkg.lastFetched !== null && (typeof pkg.lastFetched === 'undefined' || (Date.now() - pkg.lastFetched.getTime() > MS_IN_1_DAY))) {
+        if (owner !== null && repo !== null) {
+          try {
+            const { data } = await GitHub.repos.get({
+              owner,
+              repo,
+            });
+
+            Packages.update({ name: pkg.packageName }, { $set: { repoInfo: data as unknown as RepoInfo } });
+            updateObj.$set.lastFetched = new Date();
+            clientShouldFetch = true;
+          } catch (error) {
+            if (error.status === 404) {
+              updateObj.$set.lastFetched = null;
+            }
+          }
+        }
+      }
+
+      clientShouldFetch && LatestPackages.update({ _id: pkg._id }, updateObj);
     }
 
-    return false;
+    return clientShouldFetch;
   },
 });
 

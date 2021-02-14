@@ -88,6 +88,21 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
   readme: {
     fullText: 1,
   },
+  meta: {
+    repoInfo: {
+      forks_count: 1,
+      open_issues: 1,
+      watchers_count: 1,
+      fork: 1,
+      updated_at: 1,
+      language: 1,
+      stargazers_count: 1,
+      license: {
+        spdx_id: 1,
+      },
+    },
+  },
+  git: 1,
   versions: {
     $options: {
       sort: {
