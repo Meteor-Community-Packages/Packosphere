@@ -90,6 +90,7 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
   },
   meta: {
     repoInfo: {
+      html_url: 1,
       forks_count: 1,
       open_issues: 1,
       watchers_count: 1,

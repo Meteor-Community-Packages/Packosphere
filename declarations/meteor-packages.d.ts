@@ -18,6 +18,7 @@ declare module 'meteor/peerlibrary:meteor-packages' {
   }
 
   interface RepoInfo {
+    html_url: string
     forks_count: number
     open_issues: number
     watchers_count: number
@@ -25,7 +26,7 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     updated_at: string
     language: string
     stargazers_count: number
-    license: {
+    license?: {
       spdx_id: string
     }
   }

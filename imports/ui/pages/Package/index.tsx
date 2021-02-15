@@ -116,23 +116,23 @@ const PackagePage = (): JSX.Element => {
                       <span className="italic text-red-600">This package is possibly a fork</span>
                     }
                     <div className="flex items-center space-x-6 text-center lg:space-x-4">
-                      <a href={`${pkg.git}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo?.open_issues} issues</span>
+                      <a href={`${pkg.meta.repoInfo.html_url}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
+                        <span>{pkg.meta.repoInfo.open_issues} issues</span>
                       </a>
-                      <a href={`${pkg.git}/stargazers`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo?.stargazers_count} stars</span>
+                      <a href={`${pkg.meta.repoInfo.html_url}/stargazers`} target="_blank" className="flex items-center space-x-2 font-bold">
+                        <span>{pkg.meta.repoInfo.stargazers_count} stars</span>
                       </a>
-                      <a href={`${pkg.git}/network/members`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo?.forks_count} forks</span>
+                      <a href={`${pkg.meta.repoInfo.html_url}/network/members`} target="_blank" className="flex items-center space-x-2 font-bold">
+                        <span>{pkg.meta.repoInfo.forks_count} forks</span>
                       </a>
-                      <a href={`${pkg.git}/watchers`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo?.watchers_count} watchers</span>
+                      <a href={`${pkg.meta.repoInfo.html_url}/watchers`} target="_blank" className="flex items-center space-x-2 font-bold">
+                        <span>{pkg.meta.repoInfo.watchers_count} watchers</span>
                       </a>
                     </div>
                     <div className="flex space-x-6 items-center">
                       <span className="flex w-7 h-7 bg-white items-end justify-end rounded-sm">
                         <span className="text-blueGray-800 font-extrabold text-xl font-mono -mb-1">
-                          {pkg.meta.repoInfo?.language === 'TypeScript' ? 'TS' : 'JS'}
+                          {pkg.meta.repoInfo.language === 'TypeScript' ? 'TS' : 'JS'}
                         </span>
                       </span>
                       <p className="flex items-center space-x-2">
