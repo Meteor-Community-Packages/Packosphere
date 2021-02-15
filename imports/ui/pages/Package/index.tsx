@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useEffect } from 'react';
-import { Terminal, Exclamation, ExternalLinkOutline } from 'heroicons-react';
+import { Terminal, Exclamation, ExternalLinkOutline, Scale } from 'heroicons-react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -115,7 +115,7 @@ const PackagePage = (): JSX.Element => {
                     {pkg.meta.repoInfo?.fork &&
                       <span className="italic text-red-600">This package is possibly a fork</span>
                     }
-                    <div className="flex items-center space-x-6 md:text-center lg:space-x-4">
+                    <div className="flex items-center space-x-6 text-center lg:space-x-4">
                       <a href={`${pkg.git}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
                         <span>{pkg.meta.repoInfo?.open_issues} issues</span>
                       </a>
@@ -129,12 +129,15 @@ const PackagePage = (): JSX.Element => {
                         <span>{pkg.meta.repoInfo?.watchers_count} watchers</span>
                       </a>
                     </div>
-                    <div>
+                    <div className="flex space-x-6 items-center">
                       <span className="flex w-7 h-7 bg-white items-end justify-end rounded-sm">
                         <span className="text-blueGray-800 font-extrabold text-xl font-mono -mb-1">
                           {pkg.meta.repoInfo?.language === 'TypeScript' ? 'TS' : 'JS'}
                         </span>
                       </span>
+                      <p className="flex items-center space-x-2">
+                        <Scale size={25} className="inline-block" /><span className="font-bold">{pkg.meta.repoInfo.license?.spdx_id ?? 'No License'}</span>
+                      </p>
                     </div>
                   </div>
                 }
