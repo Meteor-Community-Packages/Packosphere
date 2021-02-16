@@ -19,7 +19,6 @@ coffeescript@2.4.1
 coffeescript-compiler@2.4.1
 copleykj:grapher-link-executor@2.0.0
 cultofcoders:grapher@1.3.19
-cultofcoders:grapher-react@0.1.5
 dburles:mongo-collection-instances@0.3.5
 ddp@1.4.0
 ddp-client@2.4.0

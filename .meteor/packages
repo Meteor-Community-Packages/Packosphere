@@ -20,7 +20,6 @@ accounts-password@1.7.0
 react-meteor-data       # React higher-order component for reactively tracking Meteor data
 matb33:collection-hooks@1.0.1!
 cultofcoders:grapher
-cultofcoders:grapher-react@0.1.5
 copleykj:grapher-link-executor
 peerlibrary:meteor-packages
 hexsprite:postcss
