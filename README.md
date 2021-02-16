@@ -38,3 +38,7 @@ Packosphere is the realization of a dream to have an open and transparent Packag
    ```sh
    npm start
    ```
+
+## Attributions
+
+The space helmet logo use by The Meteor Community was created by [@arggh](https://github.com/arggh)
