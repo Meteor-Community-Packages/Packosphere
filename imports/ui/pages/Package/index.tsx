@@ -149,7 +149,7 @@ const PackagePage = (): JSX.Element => {
 
               </aside>
               <article className="lg:order-1 xl:col-span-3">
-                {typeof pkg.readme !== 'undefined'
+                {typeof pkg.readme !== 'undefined' && pkg.readme.fullText !== null
                   ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
                     {typeof pkg.readme.fullText !== 'undefined'
                       ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${pkg.readme?.fullText ?? ''}`} />

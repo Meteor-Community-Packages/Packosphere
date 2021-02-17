@@ -43,7 +43,7 @@ Meteor.methods({
   async updateExternalPackageData (packageName: string) {
     check(packageName, String);
     let clientShouldFetch = false;
-    const updateObj: { $set: { 'readme.fullText'?: string, lastFetched?: Date | null}} = { $set: {} };
+    const updateObj: { $set: { 'readme.fullText'?: string | null, lastFetched?: Date | null}} = { $set: {} };
 
     const pkg = LatestPackages.findOne({
       packageName,
@@ -58,7 +58,8 @@ Meteor.methods({
     if (typeof pkg !== 'undefined') {
       if (typeof pkg.readme !== 'undefined' && typeof pkg.readme?.fullText === 'undefined' && typeof pkg.readme.url !== 'undefined') {
         const response = await fetch(pkg.readme.url);
-        updateObj.$set['readme.fullText'] = await response.text();
+        const fullText = await response.text();
+        updateObj.$set['readme.fullText'] = fullText.length > 0 ? fullText : null;
         clientShouldFetch = true;
       }
 
