@@ -28,7 +28,7 @@ const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, main
   }
 
   return (
-    <li className="flex flex-col h-60 bg-blueGray-700 text-white p-7 border, rounded-md border-gray-300 shadow-lg relative">
+    <li className="flex flex-col md:h-72 bg-blueGray-700 text-white p-7 border, rounded-md border-gray-300 shadow-lg relative">
       <Link to={`/${username}/${packagename}`} className="absolute top-0 bottom-0 right-0 left-0 z-0" />
       <h2 className="text-sm font-semibold">
         {username !== 'meteor' &&
