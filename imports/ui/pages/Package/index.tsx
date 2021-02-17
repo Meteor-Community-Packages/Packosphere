@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { xonokai as codeStyles } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useParams } from 'react-router-dom';
 import ago from 's-ago';
+import slug from 'slug';
 
 import { QPackageInfo } from '../../../../client/api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
@@ -23,6 +24,10 @@ const renderers = {
       'javascript',
     ];
     return <SyntaxHighlighter style={codeStyles} language={language} showLineNumbers={languages.includes(language)} children={value} />;
+  },
+  heading: ({ level, children, node }: {level: number, children: any, node: any}) => {
+    const Heading = `h${level}` as keyof JSX.IntrinsicElements;
+    return <Heading id={slug(node.children[0].value)} children={children} />;
   },
 };
 
