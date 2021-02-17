@@ -13,6 +13,8 @@ interface BotSettings {
 const ANNOUNCE_INTERVAL = 60 * 60 * 1000;
 const Settings = new PersistentSettings<BotSettings>('bot-settings');
 
+Settings.get('lastAnnounceTime') ?? Settings.set('lastAnnounceTime', new Date());
+
 const batchAnnouncePackageUpdates = (): void => {
   const lastUpdated = Settings.get('lastAnnounceTime');
   const updatedPackages = LatestPackages.find(
