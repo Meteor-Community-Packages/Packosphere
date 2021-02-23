@@ -27,7 +27,7 @@ const renderers = {
   },
   heading: ({ level, children, node }: {level: number, children: any, node: any}) => {
     const Heading = `h${level}` as keyof JSX.IntrinsicElements;
-    return <Heading id={slug(node.children[0].value)} children={children} />;
+    return <Heading id={slug(node.children[0].value ?? '')} children={children} />;
   },
 };
 
