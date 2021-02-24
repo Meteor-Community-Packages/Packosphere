@@ -5,42 +5,44 @@ import { Meteor } from 'meteor/meteor';
 interface QueryInfo<T> {
   loading: boolean
   refetch: () => void
-  data: T[]
+  data?: T | T[]
   count: number | undefined
   error: Meteor.Error | null
 }
 
-interface FetchConfig {
+interface QueryConfig {
   loadOnRefetch?: boolean
   fetchTotal?: boolean
+  fetchOne?: boolean
 }
 
 interface QueryParams<T> {
   query: Grapher.Query<T>
   params?: any
-  config?: FetchConfig
+  config?: QueryConfig
 }
 
-const withStaticQuery = function <T>({ query, params, config: { loadOnRefetch = true, fetchTotal = false } = {} }: QueryParams<T>): QueryInfo<T> {
+const useStaticQuery = function <T>({ query, params, config: { loadOnRefetch = true, fetchTotal = false, fetchOne = false } = {} }: QueryParams<T>): QueryInfo<T> {
   const [fetchError, setfetchError] = useState<Meteor.Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [data, setData] = useState<T[]>([]);
+  const [data, setData] = useState<QueryInfo<T>['data']>(fetchOne ? undefined : []);
   const [count, setCount] = useState<number | undefined>(undefined);
 
   const depends = Object.values(params);
 
-  const { limit, skip, ...paramsWithoutPagination } = params;
-
   const newQuery = useMemo(() => { return query.clone(params); }, depends);
-  const countQuery = useMemo(() => { return query.clone(paramsWithoutPagination); }, depends);
 
   const fetch = async (): Promise<void> => {
     let data;
     let count;
     try {
-      data = await newQuery.fetchSync();
-      if (fetchTotal) {
-        count = await countQuery.getCountSync();
+      if (fetchOne) {
+        data = await newQuery.fetchOneSync();
+      } else {
+        data = await newQuery.fetchSync();
+        if (fetchTotal) {
+          count = await newQuery.getCountSync();
+        }
       }
       setData(data);
       setCount(count);
@@ -76,4 +78,4 @@ const withStaticQuery = function <T>({ query, params, config: { loadOnRefetch = 
   };
 };
 
-export default withStaticQuery;
+export default useStaticQuery;

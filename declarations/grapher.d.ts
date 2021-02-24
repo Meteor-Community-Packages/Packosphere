@@ -15,6 +15,8 @@ declare module 'meteor/cultofcoders:grapher' {
     interface Query<T> {
       clone: (params?: object) => Query<T>
       subscribe: (cb: onReadyCallback | subscriptionCallbacks) => Meteor.SubscriptionHandle
+      subscribeCount: () => Meteor.SubscriptionHandle
+      unsubscribeCount: () => void
       setParams: () => any
       resolve: () => any
       expose: (exposure: Exposure) => void

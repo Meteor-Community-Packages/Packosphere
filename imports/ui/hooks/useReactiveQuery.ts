@@ -6,33 +6,44 @@ import { Meteor } from 'meteor/meteor';
 interface QueryInfo<T> {
   loading: boolean
   ready: boolean
-  data: T[]
+  data?: T | T[]
+  count: number | null
   error: Meteor.Error | null
+}
+
+interface QueryConfig {
+  fetchTotal?: boolean
+  fetchOne?: boolean
 }
 
 interface QueryParams<T> {
   query: Grapher.Query<T>
   params?: any
+  config?: QueryConfig
 }
 
-const withReactiveQuery = function <T>({ query, params = {} }: QueryParams<T>): QueryInfo<T> {
+const useReactiveQuery = function <T>({ query, params = {}, config: { fetchTotal = false, fetchOne = false } = {} }: QueryParams<T>): QueryInfo<T> {
   const [subscriptionError, setSubscriptionError] = useState<Meteor.Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isReady, setIsReady] = useState<boolean>(false);
 
-  const subscriptionHandle = useRef<Meteor.SubscriptionHandle | undefined>(undefined);
+  const querySubscriptionHandle = useRef<Meteor.SubscriptionHandle | undefined>(undefined);
+  const queryCountSubscriptionHandle = useRef<Meteor.SubscriptionHandle | undefined>(undefined);
   const queryRef = useRef<Grapher.Query<T> | undefined>(undefined);
 
   const depends = Object.values(params);
 
   const queryInfo: QueryInfo<T> = useTracker(() => {
     let data: QueryInfo<T>['data'] = [];
+    let count: QueryInfo<T>['count'] = null;
+
     useEffect(() => {
       queryRef.current = query.clone(params);
       setSubscriptionError(null);
       setIsLoading(true);
       setIsReady(false);
-      subscriptionHandle.current = queryRef.current?.subscribe({
+
+      querySubscriptionHandle.current = queryRef.current?.subscribe({
         onStop (err) {
           if (typeof err !== 'undefined') {
             setSubscriptionError(err);
@@ -45,16 +56,33 @@ const withReactiveQuery = function <T>({ query, params = {} }: QueryParams<T>): 
           setIsReady(true);
         },
       });
-      return () => { subscriptionHandle?.current?.stop(); };
+
+      if (fetchTotal && !fetchOne) {
+        queryCountSubscriptionHandle.current = queryRef.current.subscribeCount();
+      }
+
+      return () => {
+        querySubscriptionHandle?.current?.stop();
+        typeof queryCountSubscriptionHandle !== 'undefined' ?? query.unsubscribeCount();
+      };
     }, depends);
 
     if (typeof queryRef.current !== 'undefined' && isReady) {
-      data = queryRef.current.fetch();
+      if (fetchOne) {
+        data = queryRef.current.fetchOne();
+      } else {
+        data = queryRef.current.fetch();
+      }
+
+      if (fetchTotal) {
+        count = queryRef.current.getCount();
+      }
     }
     return {
       loading: isLoading,
       ready: isReady,
       data,
+      count,
       error: subscriptionError,
     };
   });
@@ -62,4 +90,4 @@ const withReactiveQuery = function <T>({ query, params = {} }: QueryParams<T>): 
   return queryInfo;
 };
 
-export default withReactiveQuery;
+export default useReactiveQuery;

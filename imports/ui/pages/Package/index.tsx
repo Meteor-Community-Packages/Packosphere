@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import ago from 's-ago';
 import slug from 'slug';
 
-import { QPackageInfo } from '../../../../client/api/LatestPackages';
+import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../client/api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
 import Header from '../../components/Header';
 import Page from '../../components/Page';
@@ -33,8 +33,14 @@ const renderers = {
 
 const PackagePage = (): JSX.Element => {
   const { username, packagename } = useParams<{ username: string, packagename: string }>();
-  const { data, refetch } = useQuery({ query: QPackageInfo, params: { username, packageName: packagename } });
-  const pkg = data[0];
+  const { data, refetch } = useQuery({
+    query: QPackageInfo,
+    config: { fetchOne: true },
+    params: { username, packageName: packagename },
+  });
+
+  const pkg = data as ILatestPackagesQueryResult;
+
   const age = getAgeInYears(pkg?.published);
   const old = age >= 3;
 

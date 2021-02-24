@@ -6,7 +6,7 @@ import CardGrid from '../../components/CardGrid';
 import Pagination from '../../components/Pagination';
 
 import useQuery from '../../hooks/useStaticQuery';
-import { QPackageSearch } from '../../../../api/LatestPackages';
+import { ILatestPackagesQueryResult, QPackageSearch } from '../../../../api/LatestPackages';
 import useLocationQuery from '../../hooks/useLocationQuery';
 
 const resultsPerPage = 10;
@@ -33,7 +33,8 @@ const SearchPage = (): JSX.Element => {
   const skip = (parseInt(page as string) - 1) * resultsPerPage;
 
   const { data, count, loading } = useQuery({ query: QPackageSearch, params: { query: q, limit: resultsPerPage, skip }, config: { fetchTotal: true } });
-  const dataCount = typeof count !== 'undefined' ? count : data.length;
+  const pkgs = data as ILatestPackagesQueryResult[];
+  const dataCount = typeof count !== 'undefined' ? count : pkgs?.length;
   const totalPages = Math.ceil(dataCount / resultsPerPage);
   return (
     <>
@@ -46,7 +47,7 @@ const SearchPage = (): JSX.Element => {
               <Pagination totalPages={totalPages} loading={loading} />
             </aside>
           </section>
-          <section>{typeof data !== 'undefined' && <CardGrid cardData={data} />}</section>
+          <section>{typeof data !== 'undefined' && <CardGrid cardData={pkgs} />}</section>
           <section className="flex justify-center items-center lg:hidden">
             <Pagination totalPages={totalPages} loading={loading}/>
           </section>
