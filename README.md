@@ -26,7 +26,7 @@ Packosphere is the realization of a dream to have an open and transparent Packag
 2. Clone this repository.
 
    ```sh
-   git clone https://github.com/Meteor-Community-Packages/Packosphere.git
+   git clone --recurse-submodules https://github.com/Meteor-Community-Packages/Packosphere.git
    ```
 
 3. Install NPM dependencies.
