@@ -20,6 +20,8 @@ Packosphere is the realization of a dream to have an open and transparent Packag
 
 ## Development
 
+> When you first clone and run this repo, it will start to sync the Meteor package database to the local database. This will take a non trivial amount of time (from 30 minutes to upwards of 1.5 hours). You'll probably wanna go get a cup of coffee, or 3, and come back.
+
 1. Configure editor by making sure eslint and editor-config is installed.
 2. Clone this repository.
 
