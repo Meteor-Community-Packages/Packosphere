@@ -64,7 +64,7 @@ const HeaderComponent = (): JSX.Element => {
         <div className="flex items-center space-x-5">
           <span className="from-yellow-700 to-yellow-600 bg-gradient-to-t rounded-md flex-shrink py-1 px-6 pr-4 inline-flex lg:flex-grow items-center">
             <form onSubmit={submitHandler} className="flex items-center" autoComplete="off">
-              <input type="text" name='search' onChange={changeHandler} value={searchState} className="bg-transparent outline-none w-full text-white flex-grow flex-shrink text-xl placeholder-gray-100" placeholder="Search Packages" />
+              <input type="text" name='search' autoFocus onChange={changeHandler} value={searchState} className="bg-transparent outline-none w-full text-white flex-grow flex-shrink text-xl placeholder-gray-100" placeholder="Search Packages" />
               <button className="w-10 h-10 flex items-center justify-center flex-shrink-0 rounded-full focus:outline-none focus:bg-yellow-600 hover:bg-yellow-600">
                 <Search size={18} />
               </button>
