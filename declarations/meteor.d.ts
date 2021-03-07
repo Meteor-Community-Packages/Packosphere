@@ -5,3 +5,9 @@ declare module 'meteor/accounts-base' {
     };
   }
 }
+
+declare module 'meteor/webapp' {
+  module WebApp {
+    export function addHtmlAttributeHook (callback: () => any): void;
+  }
+}

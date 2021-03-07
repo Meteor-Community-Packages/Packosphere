@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { PackageServer } from 'meteor/peerlibrary:meteor-packages';
 
+import { WebApp } from 'meteor/webapp';
 import './modules/bots';
 import './modules/accounts';
 import './api';
@@ -11,4 +12,6 @@ Accounts._defaultPublishFields.projection = { 'services.meteor-developer.emails.
 
 Meteor.startup(() => {
   PackageServer.startSyncing();
+
+  WebApp.addHtmlAttributeHook(() => ({ lang: 'en' }));
 });
