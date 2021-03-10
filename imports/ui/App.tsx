@@ -2,12 +2,15 @@ import LandingPage from './pages/Landing';
 import SearchPage from './pages/Search';
 import PackagePage from './pages/Package';
 
+import Header from './components/Header';
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 const App = (): JSX.Element => {
   return (
     <Router>
+      <Header />
       <Switch>
         <Route exact path="/">
           <LandingPage />

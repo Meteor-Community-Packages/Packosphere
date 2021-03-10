@@ -11,7 +11,6 @@ import slug from 'slug';
 
 import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../client/api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
-import Header from '../../components/Header';
 import Page from '../../components/Page';
 import { getAgeInYears } from '../../../utils';
 
@@ -75,43 +74,41 @@ const PackagePage = (): JSX.Element => {
   }, []);
 
   return (
-    <>
-      <Header />
-      <Page>
-        {typeof pkg !== 'undefined'
-          ? <>
-            <section className="flex flex-col space-y-6  pb-3">
-              <div className="flex flex-col space-y-2">
-                <h1 className="text-3xl font-semibold">{pkg.packageName}</h1>
-                <p className="flex space-x-2">
-                  <span className="text-blueGray-400">
+    <Page>
+      {typeof pkg !== 'undefined'
+        ? <>
+          <section className="flex flex-col space-y-6  pb-3">
+            <div className="flex flex-col space-y-2">
+              <h1 className="text-3xl font-semibold">{pkg.packageName}</h1>
+              <p className="flex space-x-2">
+                <span className="text-blueGray-400">
                     v{pkg.version}
-                  </span>
-                  <span>&bull;</span>
-                  <span className={publishedIndicator}>
+                </span>
+                <span>&bull;</span>
+                <span className={publishedIndicator}>
                     Published {ago(pkg.published)}
-                  </span>
-                </p>
-              </div>
-              {old && <p className="font-bold text-red-600 text-lg italic">
+                </span>
+              </p>
+            </div>
+            {old && <p className="font-bold text-red-600 text-lg italic">
                 This package has not had recent updates. Please investigate it's current state before
                 committing to using it in your project.
-              </p>}
-              <p className="text-lg">{pkg.description}</p>
-            </section>
+            </p>}
+            <p className="text-lg">{pkg.description}</p>
+          </section>
 
-            <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 xl:gap-6 items-start">
-              <aside className="flex flex-col space-y-6 lg:order-2 xl:col-span-1">
-                <div>
-                  <h3 className="text-yellow-500 text-lg mb-4">Installation</h3>
-                  <div className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
-                    <Terminal size={22} className="flex-none" />
-                    <code className="select-all">
+          <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 xl:gap-6 items-start">
+            <aside className="flex flex-col space-y-6 lg:order-2 xl:col-span-1">
+              <div>
+                <h3 className="text-yellow-500 text-lg mb-4">Installation</h3>
+                <div className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
+                  <Terminal size={22} className="flex-none" />
+                  <code className="select-all">
                     meteor add {pkg.packageName}
-                    </code>
-                  </div>
+                  </code>
                 </div>
-                {pkg.meta.repoInfo !== null && typeof pkg.meta.repoInfo !== 'undefined' &&
+              </div>
+              {pkg.meta.repoInfo !== null && typeof pkg.meta.repoInfo !== 'undefined' &&
                   <div className="flex flex-col space-y-4">
                     <div>
                       <h3 className="flex items-center justify-between text-yellow-500 text-lg mb-4">
@@ -151,30 +148,29 @@ const PackagePage = (): JSX.Element => {
                       </p>
                     </div>
                   </div>
-                }
+              }
 
-              </aside>
-              <article className="lg:order-1 xl:col-span-3">
-                {typeof pkg.readme !== 'undefined' && pkg.readme.fullText !== null
-                  ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
-                    {typeof pkg.readme.fullText !== 'undefined'
-                      ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${pkg.readme?.fullText ?? ''}`} />
-                      : <p className="text-2xl text-center">Loading...</p>
-                    }
-                  </div>
-                  : <div className="flex flex-col items-center space-y-10 flex-auto text-center py-10 bg-blueGray-600 rounded-md">
-                    <h1 className="text-2xl font-bold">No Documentation</h1>
-                    <Exclamation size={40} className="text-yellow-500"/>
-                    <p>This package does not contain a README file.</p>
-                  </div>
-                }
-              </article>
-            </section>
-          </>
-          : null
-        }
-      </Page>
-    </>
+            </aside>
+            <article className="lg:order-1 xl:col-span-3">
+              {typeof pkg.readme !== 'undefined' && pkg.readme.fullText !== null
+                ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
+                  {typeof pkg.readme.fullText !== 'undefined'
+                    ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${pkg.readme?.fullText ?? ''}`} />
+                    : <p className="text-2xl text-center">Loading...</p>
+                  }
+                </div>
+                : <div className="flex flex-col items-center space-y-10 flex-auto text-center py-10 bg-blueGray-600 rounded-md">
+                  <h1 className="text-2xl font-bold">No Documentation</h1>
+                  <Exclamation size={40} className="text-yellow-500"/>
+                  <p>This package does not contain a README file.</p>
+                </div>
+              }
+            </article>
+          </section>
+        </>
+        : null
+      }
+    </Page>
   );
 };
 
