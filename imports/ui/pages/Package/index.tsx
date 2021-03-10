@@ -120,9 +120,6 @@ const PackagePage = (): JSX.Element => {
                         <span>{pkg.git}</span>
                       </a>
                     </div>
-                    {pkg.meta.repoInfo?.fork &&
-                      <span className="italic text-red-600">This package is possibly a fork</span>
-                    }
                     <div className="flex items-center space-x-6 text-center lg:space-x-4">
                       <a href={`${pkg.meta.repoInfo.html_url}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
                         <span>{pkg.meta.repoInfo.open_issues} issues</span>
