@@ -1,6 +1,7 @@
 import LandingPage from './pages/Landing';
 import SearchPage from './pages/Search';
 import PackagePage from './pages/Package';
+import MaintainerPage from './pages/Maintainer';
 
 import Header from './components/Header';
 
@@ -20,6 +21,9 @@ const App = (): JSX.Element => {
         </Route>
         <Route exact path="/:username/:packagename/:version?">
           <PackagePage />
+        </Route>
+        <Route path="/:username">
+          <MaintainerPage />
         </Route>
       </Switch>
     </Router>

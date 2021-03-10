@@ -1,3 +1,9 @@
-import { Packages } from '../../../api';
+import { Packages, QPackagesByMaintainer } from '../../../api';
 
-export { Packages };
+QPackagesByMaintainer.expose({
+  firewall () {
+    return true;
+  },
+});
+
+export { Packages, QPackagesByMaintainer };

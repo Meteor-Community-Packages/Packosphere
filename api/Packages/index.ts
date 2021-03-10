@@ -5,7 +5,7 @@ import { LatestPackages } from '../LatestPackages';
 import { Meteor } from 'meteor/meteor';
 
 const { Packages } = PackageServer;
-export interface IPackageQueryResult extends Package {
+export interface IPackagesQueryResult extends Package {
   currentVersion: LatestPackage
 }
 Meteor.startup(() => {
@@ -19,4 +19,21 @@ Meteor.startup(() => {
   });
 });
 
-export { Packages };
+const QPackagesByMaintainer = Packages.createQuery<IPackagesQueryResult>('packagesByMaintainer', {
+  $filter: ({ filters, options, params }: any) => {
+    if (typeof params.maintainer !== 'undefined') {
+      filters['maintainers.username'] = params.maintainer;
+    }
+  },
+  currentVersion: {
+    unmigrated: 1,
+    packageName: 1,
+    version: 1,
+    description: 1,
+  },
+  maintainers: 1,
+  name: 1,
+  totalAdds: 1,
+});
+
+export { Packages, QPackagesByMaintainer };

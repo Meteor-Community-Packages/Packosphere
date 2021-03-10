@@ -17,11 +17,12 @@ const mapper = (n: number): string => {
   return ns;
 };
 
-const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, maintainers }, description } }: PackageCardProps): JSX.Element => {
+const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, maintainers }, description, unmigrated } }: PackageCardProps): JSX.Element | null => {
+  if (unmigrated || typeof packageName === 'undefined')  return null;
   let username = 'meteor';
   let packagename;
 
-  if (packageName.includes(':')) {
+  if (packageName?.includes(':')) {
     ([username, packagename] = packageName.split(':'));
   } else {
     packagename = packageName;
