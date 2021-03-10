@@ -39,7 +39,7 @@ const HeaderComponent = (): JSX.Element => {
     Meteor.loginWithMeteorDeveloperAccount();
   };
   return (
-    <header className="px-4 bg-gradient-to-t from-blueGray-800 to-blueGray-900 text-white">
+    <header className="px-4 bg-gradient-to-t from-blueGray-800 to-blueGray-900">
       <div className="flex justify-center md:justify-end container m-auto py-5">
         <ul className="flex space-x-5">
           {links.map(link => (

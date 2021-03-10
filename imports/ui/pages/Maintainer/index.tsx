@@ -2,7 +2,7 @@ import React from 'react';
 
 import Page from '../../components/Page';
 import useQuery from '../../hooks/useStaticQuery';
-import { QPackagesByMaintainer, IPackagesQueryResult, ILatestPackagesQueryResult } from '../../../../client/api';
+import { QPackagesByMaintainer, IPackagesQueryResult } from '../../../../client/api';
 import { useParams } from 'react-router-dom';
 import CardGrid from '../../components/CardGrid';
 
@@ -16,10 +16,9 @@ const MaintainerPage = (): JSX.Element => {
   const pkgs = data as IPackagesQueryResult[];
   const latestPkgs = pkgs.map((p) => {
     const { currentVersion, ...meta } = p;
-    return { ...currentVersion, meta } as ILatestPackagesQueryResult;
+    return { ...currentVersion, meta };
   });
 
-  console.log(latestPkgs);
   return (
     <Page>
       <>
