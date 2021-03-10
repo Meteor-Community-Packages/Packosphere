@@ -29,6 +29,9 @@ Meteor.startup(() => {
 });
 
 const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQueryResult>('recentlyPublishedPackages', {
+  $filters: {
+    unmigrated: { $exists: false },
+  },
   $filter: () => {},
   published: 1,
   packageName: 1,
@@ -47,7 +50,6 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
 
 const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('packageSearch', {
   $filters: {
-    published: { $gte: new Date(Date.now() - (60 * 60 * 1000 * 24 * 365 * 5)) },
     unmigrated: { $exists: false },
     $text: { $search: '' },
   },
@@ -57,7 +59,7 @@ const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('p
     }
   },
   $options: {
-    sort: { score: { $meta: 'textScore' } },
+    sort: { published: -1, score: { $meta: 'textScore' } },
     limit: 10,
   },
   $paginate: true,
