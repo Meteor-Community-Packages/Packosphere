@@ -7,7 +7,7 @@ import useLocationQuery from '../../hooks/useLocationQuery';
 import { useTracker } from 'meteor/react-meteor-data';
 
 const links = [
-  { title: 'About', url: '/aboutus' },
+  { title: 'About Us', url: 'https://meteorjs.community', external: true },
   { title: 'Packages', url: '/communitypackages' },
   { title: 'People', url: 'https://github.com/orgs/Meteor-Community-Packages/people', external: true },
   { title: 'GitHub', url: 'https://github.com/Meteor-Community-Packages', external: true },
