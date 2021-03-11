@@ -108,7 +108,7 @@ const PackagePage = (): JSX.Element => {
                   </code>
                 </div>
               </div>
-              {pkg.meta.repoInfo !== null && typeof pkg.meta.repoInfo !== 'undefined' &&
+              {typeof pkg.meta?.repoInfo !== 'undefined' && pkg.meta.repoInfo !== null &&
                   <div className="flex flex-col space-y-4">
                     <div>
                       <h3 className="flex items-center justify-between text-yellow-500 text-lg mb-4">
