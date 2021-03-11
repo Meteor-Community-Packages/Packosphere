@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import Page from '../../components/Page';
 import CardGrid from '../../components/CardGrid';
 import Pagination from '../../components/Pagination';
@@ -11,22 +9,6 @@ import useLocationQuery from '../../hooks/useLocationQuery';
 const resultsPerPage = 10;
 
 const SearchPage = (): JSX.Element => {
-  const history = useHistory();
-  useEffect(() => {
-    // XXX - Figure out how to type this nightmare.
-    const unlisten = history.listen(({ action, location }: any) => {
-      setTimeout(() => {
-        if (action !== 'POP') {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-          });
-        }
-      });
-    });
-
-    return () => { unlisten(); };
-  }, []);
   const [search] = useLocationQuery();
   const { q, page = '1' } = search;
   const skip = (parseInt(page as string) - 1) * resultsPerPage;

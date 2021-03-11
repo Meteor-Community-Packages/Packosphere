@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import gravatar from 'gravatar';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Search, Login } from 'heroicons-react';
 import useLocationQuery from '../../hooks/useLocationQuery';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -18,6 +18,23 @@ const HeaderComponent = (): JSX.Element => {
   const [locationQuery, setLocationQuery] = useLocationQuery();
   const q = typeof locationQuery.q === 'string' ? locationQuery.q : '';
   const [searchState, setSearchState] = useState(q);
+
+  const history = useHistory();
+  useEffect(() => {
+    // XXX - Figure out how to type this nightmare.
+    const unlisten = history.listen(({ action, location }: any) => {
+      setTimeout(() => {
+        if (action !== 'POP') {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        }
+      });
+    });
+
+    return () => { unlisten(); };
+  }, []);
 
   const user = useTracker(() => {
     return Meteor.user();
