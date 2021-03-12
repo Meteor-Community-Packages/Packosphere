@@ -30,6 +30,7 @@ const QPackagesByMaintainer = Packages.createQuery<IPackagesQueryResult>('packag
     packageName: 1,
     version: 1,
     description: 1,
+    published: 1,
   },
   maintainers: 1,
   name: 1,

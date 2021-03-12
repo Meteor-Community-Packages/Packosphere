@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CloudDownloadOutline } from 'heroicons-react';
 import human from 'human-number';
+import ago from 's-ago';
 
 import { ILatestPackagesQueryResult } from '../../../../client/api';
 
@@ -17,7 +18,7 @@ const mapper = (n: number): string => {
   return ns;
 };
 
-const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, maintainers }, description, unmigrated } }: PackageCardProps): JSX.Element | null => {
+const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, maintainers }, published, description, unmigrated } }: PackageCardProps): JSX.Element | null => {
   if (typeof unmigrated !== 'undefined' || typeof packageName === 'undefined') return null;
   let username = 'meteor';
   let packagename;
@@ -29,24 +30,25 @@ const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, main
   }
 
   return (
-    <li className="flex flex-col md:h-72 bg-blueGray-700 text-white p-7 border, rounded-md border-gray-300 shadow-lg relative">
+    <li className="flex flex-col md:h-72 bg-blueGray-700 text-white p-7 pb-4 border, rounded-md border-gray-300 shadow-lg relative">
       <Link to={`/${username}/${packagename}`} className="absolute inset-0 z-0" >
         <span className="sr-only">{packageName}</span>
       </Link>
-      <h2 className="text-sm font-semibold">
+      <h2 className="font-semibold">
         {username !== 'meteor' &&
             <span className="inline-block">
               <Link to={`/${username}`} className="relative z-10">{username}</Link>:
             </span>}
         <span className="inline-block">{packagename}</span>
       </h2>
-      <p className="text-gray-300 text-sm my-4 break-words flex-auto">{description}</p>
+      <p className="text-gray-300 my-4 break-words flex-auto">{description}</p>
       <div className='flex items-center space-x-1 justify-between'>
-        <div className="from-blueGray-700 to-blueGray-600 bg-gradient-to-t px-3 py-1.5 space-x-1 flex items-center rounded-sm text-xs font-semibold text-white">
-          <CloudDownloadOutline size={18} />
-          <span>{typeof totalAdds !== 'undefined' && totalAdds > 0 ? human(totalAdds, mapper) : '0'}</span>
-        </div>
-        <div>
+        <p className="text-xs">{ago(published)}</p>
+        <div className="flex items-center space-x-2">
+          <div className="space-x-1 flex items-center rounded-sm text-xs font-semibold text-white">
+            <CloudDownloadOutline size={18} />
+            <span>{typeof totalAdds !== 'undefined' && totalAdds > 0 ? human(totalAdds, mapper) : '0'}</span>
+          </div>
           {maintainers.some(maintainer => { return maintainer.username === 'communitypackages'; })
             ? <img
               src="https://avatars.slack-edge.com/2019-11-22/846109315856_16870da10c58e584b545_88.png"

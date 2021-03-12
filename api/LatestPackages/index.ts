@@ -59,7 +59,7 @@ const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('p
     }
   },
   $options: {
-    sort: { published: -1, score: { $meta: 'textScore' } },
+    sort: { score: { $meta: 'textScore' } },
     limit: 10,
   },
   $paginate: true,
