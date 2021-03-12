@@ -1,7 +1,7 @@
 
-export const makeAtmosphereLink = (packageName: string): string => {
+export const makePackosphereLink = (packageName: string): string => {
   const path = packageName.includes(':') ? packageName.replace(':', '/') : `meteor/${packageName}`;
-  return `https://atmospherejs.com/${path}`;
+  return `https://packosphere.com/${path}`;
 };
 
 export const getAgeInYears = (date: Date | undefined): number => {
