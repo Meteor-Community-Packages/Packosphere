@@ -18,7 +18,7 @@ const mapper = (n: number): string => {
 };
 
 const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, maintainers }, description, unmigrated } }: PackageCardProps): JSX.Element | null => {
-  if (unmigrated || typeof packageName === 'undefined')  return null;
+  if (typeof unmigrated !== 'undefined' || typeof packageName === 'undefined') return null;
   let username = 'meteor';
   let packagename;
 
@@ -47,7 +47,7 @@ const PackageCardComponent = ({ cardData: { packageName, meta: { totalAdds, main
           <span>{typeof totalAdds !== 'undefined' && totalAdds > 0 ? human(totalAdds, mapper) : '0'}</span>
         </div>
         <div>
-          {maintainers.some(maintainer => maintainer.username === 'communitypackages')
+          {maintainers.some(maintainer => { return maintainer.username === 'communitypackages'; })
             ? <img
               src="https://avatars.slack-edge.com/2019-11-22/846109315856_16870da10c58e584b545_88.png"
               alt=""

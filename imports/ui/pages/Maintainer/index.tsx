@@ -16,7 +16,7 @@ const MaintainerPage = (): JSX.Element => {
   const pkgs = data as IPackagesQueryResult[];
   const latestPkgs = pkgs.map((p) => {
     const { currentVersion, ...meta } = p;
-    return { ...currentVersion, meta };
+    return { ...currentVersion, meta, versions: [] };
   });
 
   return (

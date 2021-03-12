@@ -7,8 +7,8 @@ import { Versions } from '../Versions';
 const { LatestPackages } = PackageServer;
 
 export interface ILatestPackagesQueryResult extends LatestPackage {
-  meta?: Package
-  versions?: Version[]
+  meta: Package
+  versions: Version[]
 }
 
 Meteor.startup(() => {
