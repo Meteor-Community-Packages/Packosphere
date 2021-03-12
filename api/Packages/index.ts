@@ -25,6 +25,9 @@ const QPackagesByMaintainer = Packages.createQuery<IPackagesQueryResult>('packag
       filters['maintainers.username'] = params.maintainer;
     }
   },
+  $options: {
+    sort: { lastUpdated: -1 },
+  },
   currentVersion: {
     unmigrated: 1,
     packageName: 1,
