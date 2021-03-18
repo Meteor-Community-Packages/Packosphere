@@ -58,9 +58,11 @@ Meteor.methods({
     if (typeof pkg !== 'undefined') {
       if (typeof pkg.readme !== 'undefined' && typeof pkg.readme?.fullText === 'undefined' && typeof pkg.readme.url !== 'undefined') {
         const response = await fetch(pkg.readme.url);
-        const fullText = await response.text();
-        updateObj.$set['readme.fullText'] = fullText.length > 0 ? fullText : null;
-        clientShouldFetch = true;
+        if (response.status === 200) {
+          const fullText = await response.text();
+          updateObj.$set['readme.fullText'] = fullText.length > 0 ? fullText : null;
+          clientShouldFetch = true;
+        }
       }
 
       if (pkg.lastFetched !== null && (typeof pkg.lastFetched === 'undefined' || (Date.now() - pkg.lastFetched.getTime() > MS_IN_1_DAY))) {
