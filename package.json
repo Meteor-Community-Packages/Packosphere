@@ -27,6 +27,7 @@
     "react-syntax-highlighter": "^15.4.3",
     "remark-gfm": "^1.0.0",
     "s-ago": "^2.2.0",
+    "simpl-schema": "^1.10.2",
     "slug": "^4.0.2",
     "twitter": "^1.7.1"
   },
