@@ -1,0 +1,10 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>Packosphere</ShortName>
+    <Description>Packosphere package search</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Url type="text/html" method="GET" template="https://packosphere.com/search?q={searchTerms}"/>
+    <Url type="application/opensearchdescription+xml" rel="self" template="/opensearch.xml" />
+    <Image width="16" height="16">https://packosphere.com/assets/favicon/favicon.ico</Image>
+    <InputEncoding>UTF-8</InputEncoding>
+    <moz:SearchForm>https://packosphere.com/search</moz:SearchForm>
+</OpenSearchDescription>
