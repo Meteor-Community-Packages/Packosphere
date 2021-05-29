@@ -1,8 +1,9 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 import Page from '../../components/Page';
 import useQuery from '../../hooks/useStaticQuery';
-import { QPackagesByMaintainer, IPackagesQueryResult } from '../../../../client/api';
+import { QPackagesByMaintainer, IPackagesQueryResult } from '../../../../api';
 import { useParams } from 'react-router-dom';
 import CardGrid from '../../components/CardGrid';
 
@@ -21,10 +22,12 @@ const MaintainerPage = (): JSX.Element => {
 
   return (
     <Page>
-      <>
-        <h2 className="text-2xl text-center">Packages Maintained By<br /><span className="text-yellow-600 text-4xl">{username}</span></h2>
-        <section>{typeof data !== 'undefined' && <CardGrid cardData={latestPkgs} />}</section>
-      </>
+      <Helmet>
+        <title>Packages Maintained by {username} - Packosphere</title>
+        <meta name="description" content={`All of Meteor packages that are currently maintained by ${username}`} />
+      </Helmet>
+      <h2 className="text-2xl text-center">Packages Maintained By<br /><span className="text-yellow-600 text-4xl">{username}</span></h2>
+      <section>{typeof data !== 'undefined' && <CardGrid cardData={latestPkgs} />}</section>
     </Page>
   );
 };

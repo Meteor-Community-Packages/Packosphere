@@ -1,5 +1,7 @@
 node_modules/
 packages/grapher-react
 packages/package-server-sync
+packages/meteor-fast-render
+packages/meteor-inject-data
 .deploy/
 *settings.json

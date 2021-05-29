@@ -4,7 +4,7 @@ import { CloudDownloadOutline } from 'heroicons-react';
 import human from 'human-number';
 import ago from 's-ago';
 
-import { ILatestPackagesQueryResult } from '../../../../client/api';
+import { ILatestPackagesQueryResult } from '../../../../api';
 
 interface PackageCardProps {
   cardData: ILatestPackagesQueryResult

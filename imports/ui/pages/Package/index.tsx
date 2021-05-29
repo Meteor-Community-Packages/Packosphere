@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Terminal, Exclamation, ExternalLinkOutline, Scale } from 'heroicons-react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -9,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import ago from 's-ago';
 import slug from 'slug';
 
-import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../client/api/LatestPackages';
+import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
 import Page from '../../components/Page';
 import { getAgeInYears } from '../../../utils';
@@ -77,6 +78,10 @@ const PackagePage = (): JSX.Element => {
     <Page>
       {typeof pkg !== 'undefined'
         ? <>
+          <Helmet>
+            <title>{pkg.packageName} - Packosphere</title>
+            <meta name="description" content={pkg.description} />
+          </Helmet>
           <section className="flex flex-col space-y-6  pb-3">
             <div className="flex flex-col space-y-2">
               <h1 className="text-3xl font-semibold">{pkg.packageName}</h1>

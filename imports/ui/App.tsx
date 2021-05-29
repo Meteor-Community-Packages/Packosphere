@@ -7,11 +7,12 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { renderWithSSR } from 'meteor/communitypackages:react-router-ssr';
 
 const App = (): JSX.Element => {
   return (
-    <Router>
+    <>
       <div className="min-h-screen">
         <Header />
         <Switch>
@@ -30,8 +31,8 @@ const App = (): JSX.Element => {
         </Switch>
       </div>
       <Footer />
-    </Router>
+    </>
   );
 };
 
-export default App;
+renderWithSSR(<App />);

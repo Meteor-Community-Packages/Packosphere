@@ -22,6 +22,7 @@
     "query-string": "^6.13.8",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
     "react-syntax-highlighter": "^15.4.3",
@@ -39,6 +40,7 @@
     "@types/parse-github-url": "^1.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-helmet": "^6.1.0",
     "@types/react-router": "^5.1.9",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-syntax-highlighter": "^13.5.0",
@@ -53,6 +55,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^5.0.0",
+    "jquery": "^3.6.0",
     "postcss": "^8.2.2",
     "postcss-import": "14.0.0",
     "postcss-load-config": "^3.0.0",
@@ -106,7 +109,7 @@
   },
   "meteor": {
     "mainModule": {
-      "client": "client/main.tsx",
+      "client": "client/main.ts",
       "server": "server/main.ts"
     },
     "testModule": "tests/main.ts"

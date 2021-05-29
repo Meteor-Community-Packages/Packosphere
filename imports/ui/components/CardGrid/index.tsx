@@ -1,6 +1,6 @@
 import React from 'react';
 import PackageCard from '../PackageCard';
-import { ILatestPackagesQueryResult } from '../../../../client/api';
+import { ILatestPackagesQueryResult } from '../../../../api';
 
 interface CardGridProps {
   cardData: ILatestPackagesQueryResult[]
