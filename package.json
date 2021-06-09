@@ -44,7 +44,7 @@
     "@types/react-router": "^5.1.9",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-syntax-highlighter": "^13.5.0",
-    "@types/simpl-schema": "^1.10.0",
+    "@types/simpl-schema": "^1.10.3",
     "@types/slug": "^0.9.1",
     "@types/twitter": "^1.7.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
