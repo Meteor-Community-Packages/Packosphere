@@ -6,14 +6,14 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { xonokai as codeStyles } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ago from 's-ago';
 import slug from 'slug';
 
 import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
 import Page from '../../components/Page';
-import { getAgeInYears } from '../../../utils';
+import { getAgeInYears, formatDateToString } from '../../../utils';
 
 const renderers = {
   code: ({ language, value }: { language: string, value: string }) => {
@@ -32,16 +32,23 @@ const renderers = {
 };
 
 const PackagePage = (): JSX.Element => {
-  const { username, packagename } = useParams<{ username: string, packagename: string }>();
+  const { username, packagename, version } = useParams<{ username: string, packagename: string, version: string | undefined }>();
   const { data, refetch } = useQuery({
     query: QPackageInfo,
     config: { fetchOne: true },
     params: { username, packageName: packagename },
   });
 
-  const pkg = data as ILatestPackagesQueryResult;
+  let pkg;
+  let displayVersion;
+  let age = 0;
 
-  const age = getAgeInYears(pkg?.published);
+  if (typeof data !== 'undefined') {
+    pkg = data as ILatestPackagesQueryResult;
+    const neededVersion = version ?? pkg?.version;
+    displayVersion = pkg.versions.find(v => v.version === neededVersion);
+    age = getAgeInYears(displayVersion?.published);
+  }
   const old = age >= 3;
 
   let publishedIndicator: string;
@@ -63,7 +70,7 @@ const PackagePage = (): JSX.Element => {
   }
 
   useEffect(() => {
-    Meteor.call('updateExternalPackageData', `${username !== 'meteor' ? `${username}:` : ''}${packagename}`,
+    Meteor.call('updateExternalPackageData', `${username !== 'meteor' ? `${username}:` : ''}${packagename}`, version,
       (error: Meteor.Error, result: boolean) => {
         if (typeof error === 'undefined') {
           if (result) {
@@ -72,26 +79,26 @@ const PackagePage = (): JSX.Element => {
         }
       },
     );
-  }, []);
+  }, [version]);
 
   return (
     <Page>
-      {typeof pkg !== 'undefined'
+      {typeof pkg !== 'undefined' && typeof displayVersion !== 'undefined'
         ? <>
           <Helmet>
             <title>{pkg.packageName} - Packosphere</title>
-            <meta name="description" content={pkg.description} />
+            <meta name="description" content={displayVersion.description} />
           </Helmet>
           <section className="flex flex-col space-y-6  pb-3">
             <div className="flex flex-col space-y-2">
-              <h1 className="text-3xl font-semibold">{pkg.packageName}</h1>
+              <h1 className="text-3xl font-semibold">{displayVersion.packageName}</h1>
               <p className="flex space-x-2">
                 <span className="text-blueGray-400">
-                    v{pkg.version}
+                  v{displayVersion?.version}
                 </span>
                 <span>&bull;</span>
                 <span className={publishedIndicator}>
-                    Published {ago(pkg.published)}
+                    Published {ago(displayVersion.published)}
                 </span>
               </p>
             </div>
@@ -99,7 +106,7 @@ const PackagePage = (): JSX.Element => {
                 This package has not had recent updates. Please investigate it's current state before
                 committing to using it in your project.
             </p>}
-            <p className="text-lg">{pkg.description}</p>
+            <p className="text-lg">{displayVersion.description}</p>
           </section>
 
           <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 xl:gap-6 items-start">
@@ -118,7 +125,7 @@ const PackagePage = (): JSX.Element => {
                     <div>
                       <h3 className="flex items-center justify-between text-yellow-500 text-lg mb-4">
                         <span>Repo</span>
-                        <span className="text-xs text-blueGray-400">Updated {ago(new Date(pkg.meta.repoInfo.updated_at))}</span>
+                        <span className="text-xs text-blueGray-400">Last pushed {ago(new Date(pkg.meta.repoInfo.pushed_at))}</span>
                       </h3>
                       <a href={pkg.git} target="_blank" className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
                         <ExternalLinkOutline size={22} className="flex-none" />
@@ -152,12 +159,25 @@ const PackagePage = (): JSX.Element => {
                   </div>
               }
 
+              <div>
+                <h3 className="text-yellow-500 text-lg mb-4">Versions</h3>
+                <div className="flex flex-col border-blueGray-600 border px-4 py-4 overflow-hidden whitespace-pre rounded-md space-y-4">
+                  {pkg.versions.map(version => {
+                    return (
+                      <Link to={`/${username}/${packagename}/${version.version}`} className="flex items-center space-x-2" key={version._id} >
+                        <span>v{version.version}</span><span className="text-gray-500 text-sm">{formatDateToString(version.published)}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
             </aside>
             <article className="lg:order-1 xl:col-span-3">
-              {typeof pkg.readme !== 'undefined' && pkg.readme.fullText !== null
+              {typeof displayVersion.readme !== 'undefined' && displayVersion.readme.fullText !== null
                 ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
-                  {typeof pkg.readme.fullText !== 'undefined'
-                    ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${pkg.readme?.fullText ?? ''}`} />
+                  {typeof displayVersion.readme.fullText !== 'undefined'
+                    ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${displayVersion.readme?.fullText ?? ''}`} />
                     : <p className="text-2xl text-center">Loading...</p>
                   }
                 </div>

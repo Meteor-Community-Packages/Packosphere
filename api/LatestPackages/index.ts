@@ -2,9 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { PackageServer, LatestPackage, Package, Version } from 'meteor/peerlibrary:meteor-packages';
 import { addLinks } from 'meteor/copleykj:grapher-link-executor';
 import { Packages } from '../Packages';
-import { Versions } from '../Versions';
-
+import { Versions, VersionsSchema } from '../Versions';
 const { LatestPackages } = PackageServer;
+
+LatestPackages.attachSchema(VersionsSchema);
 
 export interface ILatestPackagesQueryResult extends LatestPackage {
   meta: Package
@@ -111,9 +112,13 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
       sort: {
         version: -1,
       },
-      limit: 5,
+      limit: 15,
     },
     version: 1,
+    readme: {
+      fullText: 1,
+    },
+    published: 1,
   },
 });
 

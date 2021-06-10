@@ -1,3 +1,4 @@
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export const makePackosphereLink = (packageName: string): string => {
   const path = packageName.includes(':') ? packageName.replace(':', '/') : `meteor/${packageName}`;
@@ -11,4 +12,8 @@ export const getAgeInYears = (date: Date | undefined): number => {
     return diff.getUTCFullYear() - 1970;
   }
   return 0;
+};
+
+export const formatDateToString = (date: Date): string => {
+  return `${months[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
 };

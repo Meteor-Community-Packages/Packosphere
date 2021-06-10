@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 import { fetch } from 'meteor/fetch';
 import { RepoInfo } from 'meteor/peerlibrary:meteor-packages';
 import { Octokit } from '@octokit/rest';
 import ParseGitHubUrl from 'parse-github-url';
 import { Packages } from '../Packages';
-import { LatestPackages, QRecentlyPublishedPackages, QPackageSearch, QPackageInfo } from '../../../api';
+import { LatestPackages, Versions, QRecentlyPublishedPackages, QPackageSearch, QPackageInfo } from '../../../api';
 
 const MS_IN_1_DAY = 1000 * 24 * 60 * 60;
 
@@ -40,8 +40,9 @@ QPackageInfo.expose({
 });
 
 Meteor.methods({
-  async updateExternalPackageData (packageName: string) {
+  async updateExternalPackageData (packageName: string, version: string | null = null) {
     check(packageName, String);
+    check(version, Match.Maybe(String));
     let clientShouldFetch = false;
     const updateObj: { $set: { 'readme.fullText'?: string | null, lastFetched?: Date | null}} = { $set: {} };
 
@@ -49,18 +50,28 @@ Meteor.methods({
       packageName,
     }, {
       fields: {
-        _id: 1, packageName: 1, 'readme.url': 1, 'readme.fullText': 1, git: 1, lastFetched: 1,
+        _id: 1, packageName: 1, 'readme.url': 1, 'readme.fullText': 1, git: 1, lastFetched: 1, version: 1,
       },
     });
 
     const { owner, name: repo } = ParseGitHubUrl(pkg?.git ?? '') ?? { owner: null, name: null };
 
     if (typeof pkg !== 'undefined') {
-      if (typeof pkg.readme !== 'undefined' && typeof pkg.readme?.fullText === 'undefined' && typeof pkg.readme.url !== 'undefined') {
-        const response = await fetch(pkg.readme.url);
+      const versionDoc = Versions.findOne({
+        packageName,
+        version: version ?? pkg.version,
+      }, {
+        fields: {
+          _id: 1,
+          readme: 1,
+        },
+      });
+
+      if (typeof versionDoc !== 'undefined' && typeof versionDoc.readme !== 'undefined' && typeof versionDoc.readme.fullText === 'undefined' && typeof versionDoc.readme.url !== 'undefined') {
+        const response = await fetch(versionDoc.readme.url);
         if (response.status === 200) {
           const fullText = await response.text();
-          updateObj.$set['readme.fullText'] = fullText.length > 0 ? fullText : null;
+          Versions.update({ _id: versionDoc._id, version: versionDoc.version }, { $set: { 'readme.fullText': fullText.length > 0 ? fullText : null } });
           clientShouldFetch = true;
         }
       }
@@ -84,7 +95,7 @@ Meteor.methods({
         }
       }
 
-      clientShouldFetch && LatestPackages.update({ _id: pkg._id }, updateObj);
+      Object.keys(updateObj.$set).length > 0 && LatestPackages.update({ _id: pkg._id }, updateObj);
     }
 
     return clientShouldFetch;
