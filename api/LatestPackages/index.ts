@@ -110,7 +110,7 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
   versions: {
     $options: {
       sort: {
-        version: -1,
+        published: -1,
       },
       limit: 15,
     },
