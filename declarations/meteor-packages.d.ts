@@ -22,9 +22,8 @@ declare module 'meteor/peerlibrary:meteor-packages' {
     forks_count: number
     open_issues: number
     watchers_count: number
-    fork: boolean
-    updated_at: string
     language: string
+    pushed_at: Date
     stargazers_count: number
     license?: {
       spdx_id: string

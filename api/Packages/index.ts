@@ -1,10 +1,45 @@
 import { PackageServer, Package, LatestPackage } from 'meteor/peerlibrary:meteor-packages';
 import { addLinks } from 'meteor/copleykj:grapher-link-executor';
 
+import SimpleSchema from 'simpl-schema';
+
 import { LatestPackages } from '../LatestPackages';
 import { Meteor } from 'meteor/meteor';
 
 const { Packages } = PackageServer;
+
+const PackagesSchema = new SimpleSchema({
+  name: String,
+  maintainers: Array,
+  'maintainers.$': new SimpleSchema({
+    username: String,
+    id: String,
+  }),
+  homepage: {
+    type: String,
+    optional: true,
+  },
+  lastUpdated: Date,
+  directAdds: SimpleSchema.Integer,
+  totalAdds: SimpleSchema.Integer,
+  repoInfo: new SimpleSchema({
+    html_url: String,
+    forks_count: Number,
+    open_issues: Number,
+    watchers_count: Number,
+    language: String,
+    pushed_at: Date,
+    stargazers_count: Number,
+    license: {
+      type: new SimpleSchema({
+        spdx_id: String,
+      }),
+      optional: true,
+    },
+  }),
+});
+
+Packages.attachSchema(PackagesSchema);
 export interface IPackagesQueryResult extends Package {
   currentVersion: LatestPackage
 }
