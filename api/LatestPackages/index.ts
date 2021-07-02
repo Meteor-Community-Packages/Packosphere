@@ -81,6 +81,7 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
     }
   },
   $options: {
+    sort: { published: -1 },
     limit: 1,
   },
   packageName: 1,
