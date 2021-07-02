@@ -11,3 +11,5 @@ declare module 'meteor/webapp' {
     export function addHtmlAttributeHook (callback: () => any): void;
   }
 }
+
+declare module 'meteor/communitypackages:react-router-ssr'
