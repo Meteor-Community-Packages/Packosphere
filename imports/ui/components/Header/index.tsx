@@ -22,7 +22,7 @@ const HeaderComponent = (): JSX.Element => {
   const history = useHistory();
   useEffect(() => {
     // XXX - Figure out how to type this nightmare.
-    const unlisten = history.listen(({ action, location }: any) => {
+    const unlisten = history.listen((location, action: string) => {
       setTimeout(() => {
         if (action !== 'POP') {
           window.scrollTo({
