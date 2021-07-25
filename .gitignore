@@ -3,5 +3,6 @@ packages/grapher-react
 packages/package-server-sync
 packages/meteor-fast-render
 packages/meteor-inject-data
+packages/meteor-postcss
 .deploy/
 *settings.json
