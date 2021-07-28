@@ -1,6 +1,6 @@
 declare module 'meteor/accounts-base' {
   module Accounts {
-    var _defaultPublishFields: {
+    let _defaultPublishFields: {
       projection: any
     };
   }
