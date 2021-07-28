@@ -28,15 +28,14 @@ const useStaticQuery = function <T>({ query, params = {}, config: { loadOnRefetc
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<QueryInfo<T>['data']>(fetchOne ? undefined : []);
   const [count, setCount] = useState<number | undefined>(undefined);
-
   const depends = Object.values(params);
+  const serverData = FastRender.getExtraData('staticQueryData');
 
   const newQuery = useMemo(() => { return query.clone(params); }, depends);
   const fetch = async (): Promise<void> => {
     let data;
     let count;
     try {
-      const serverData = FastRender.getExtraData('staticQueryData');
       if (serverData !== null) {
         ({ data, count } = serverData);
       } else {
@@ -102,10 +101,10 @@ const useStaticQuery = function <T>({ query, params = {}, config: { loadOnRefetc
     return { ...fetchServer(), refetch };
   } else {
     return {
-      loading: isLoading,
+      loading: serverData === null && isLoading,
       refetch,
-      data,
-      count,
+      data: serverData?.data ?? data,
+      count: serverData?.count ?? count,
       error: fetchError,
     };
   }

@@ -13,3 +13,4 @@ declare module 'meteor/webapp' {
 }
 
 declare module 'meteor/communitypackages:react-router-ssr'
+declare module 'meteor/communitypackages:fast-render'
