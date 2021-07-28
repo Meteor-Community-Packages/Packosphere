@@ -643,7 +643,7 @@
 .markdown-body pre,
 .markdown-body table,
 .markdown-body ul {
-  margin-top: 0;
+  margin-top: 16px;
   margin-bottom: 16px;
 }
 
@@ -835,7 +835,7 @@
 }
 
 .markdown-body .highlight pre,
-.markdown-body pre {
+.markdown-body pre > pre {
   padding: 16px;
   overflow: auto;
   font-size: 85%;

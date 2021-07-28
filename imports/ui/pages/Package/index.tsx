@@ -15,20 +15,40 @@ import useQuery from '../../hooks/useStaticQuery';
 import Page from '../../components/Page';
 import { getAgeInYears, formatDateToString } from '../../../utils';
 
+const heading = ({ level, children }: { level: number, children: React.ReactNode }): React.ReactNode => {
+  const Heading = `h${level}` as keyof JSX.IntrinsicElements;
+  return <Heading id={slug(String(children ?? ''))} children={children} />;
+};
+
 const renderers = {
-  code: ({ language, value }: { language: string, value: string }) => {
+  code ({ inline, className, children, ...props }: { inline?: boolean, className?: string, children: React.ReactNode }) {
+    const match = /language-(\w+)/.exec(className ?? '');
     const languages = [
       'ts',
       'typescript',
       'js',
       'javascript',
+      'cs',
+      'coffeescript',
+      'html',
+      'jsx',
+      'json',
+      'css',
     ];
-    return <SyntaxHighlighter style={codeStyles} language={language} showLineNumbers={languages.includes(language)} children={value} />;
+    if (typeof inline !== 'undefined' && inline) {
+      return <code className={className} {...props}>{children}</code>;
+    } else {
+      const language = match?.[1] ?? '';
+      const value = children ?? '';
+      return <SyntaxHighlighter style={codeStyles} language={language} showLineNumbers={languages.includes(language)} children={String(value).replace(/\n$/, '')} />;
+    }
   },
-  heading: ({ level, children, node }: {level: number, children: any, node: any}) => {
-    const Heading = `h${level}` as keyof JSX.IntrinsicElements;
-    return <Heading id={slug(node.children[0].value ?? '')} children={children} />;
-  },
+  h1: heading,
+  h2: heading,
+  h3: heading,
+  h4: heading,
+  h5: heading,
+  h6: heading,
 };
 
 const PackagePage = (): JSX.Element => {
@@ -177,7 +197,7 @@ const PackagePage = (): JSX.Element => {
               {typeof displayVersion.readme !== 'undefined' && displayVersion.readme.fullText !== null
                 ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
                   {typeof displayVersion.readme.fullText !== 'undefined'
-                    ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${displayVersion.readme?.fullText ?? ''}`} />
+                    ? <ReactMarkdown skipHtml plugins={[gfm]} components={renderers} children={`${displayVersion.readme?.fullText ?? ''}`} />
                     : <p className="text-2xl text-center">Loading...</p>
                   }
                 </div>
