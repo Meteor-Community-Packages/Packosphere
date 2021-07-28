@@ -7,7 +7,10 @@ const VersionsSchema = new SimpleSchema({
   packageName: String,
   version: String,
   description: String,
-  longDescription: String,
+  longDescription: {
+    type: String,
+    optional: true,
+  },
   git: {
     type: String,
     optional: true,
