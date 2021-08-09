@@ -1,5 +1,5 @@
 const colors = require('tailwindcss/colors');
-
+const forms = require('@tailwindcss/forms');
 module.exports = {
   purge: [
     './imports/ui/**/*.tsx',
@@ -10,11 +10,18 @@ module.exports = {
     extend: {
       colors: {
         blueGray: colors.blueGray,
+        coolGray: colors.coolGray,
       },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'],
+      textColor: ['active'],
+      borderColor: ['checked', 'hover', 'focus'],
+    },
   },
-  plugins: [],
+  plugins: [
+    forms,
+  ],
 };

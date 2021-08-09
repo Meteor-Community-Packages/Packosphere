@@ -7,6 +7,7 @@ import useLocationQuery from '../../hooks/useLocationQuery';
 interface PaginationProps {
   totalPages: number
   loading: boolean
+  message?: string
 }
 
 interface LinkOrNotProps {
@@ -22,7 +23,7 @@ const LinkOrNot = ({ link, to, children, ...props }: LinkOrNotProps): JSX.Elemen
     : <span className='text-blueGray-600' {...props}>{children}</span>;
 };
 
-const Pagination = ({ totalPages = 0, loading = false }: PaginationProps): JSX.Element => {
+const Pagination = ({ totalPages = 0, loading = false, message = 'No Results...' }: PaginationProps): JSX.Element => {
   const [search] = useLocationQuery();
   const { page = '1' } = search;
   const pageNumber = parseInt(page as string);
@@ -39,11 +40,13 @@ const Pagination = ({ totalPages = 0, loading = false }: PaginationProps): JSX.E
         <Refresh size={22} className="h-6 w-6" style={{ transform: 'scaleX(-1)' }}/>
       </span>
       <span className="flex items-center">
-        <LinkOrNot link={pageNumber !== 1} to={`/search?${prevSearchString}`} title="Previous">
+        <LinkOrNot link={pageNumber > 1} to={`/search?${prevSearchString}`} title="Previous">
           <ArrowNarrowLeft size={20} />
         </LinkOrNot>
-        <span className="w-40 text-center">page {pageNumber} of {totalPages}</span>
-        <LinkOrNot link={pageNumber !== totalPages} to={`/search?${nextSearchString}`} title="Next">
+        <span className="w-40 text-center">
+          {totalPages > 0 ? `page ${pageNumber} of ${totalPages}` : message }
+        </span>
+        <LinkOrNot link={pageNumber !== totalPages && totalPages > 1} to={`/search?${nextSearchString}`} title="Next">
           <ArrowNarrowRight size={20} />
         </LinkOrNot>
       </span>

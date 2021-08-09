@@ -22,10 +22,12 @@ matb33:collection-hooks@1.0.1!
 cultofcoders:grapher
 copleykj:grapher-link-executor
 peerlibrary:meteor-packages
-hexsprite:postcss
+juliancwirko:postcss
 accounts-meteor-developer@1.4.2
 service-configuration@1.0.11
-staringatlights:fast-render
 hot-module-replacement
 react-fast-refresh
 check
+communitypackages:react-router-ssr
+communitypackages:fast-render
+socialize:base-model

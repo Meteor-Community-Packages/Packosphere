@@ -2,9 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { PackageServer, LatestPackage, Package, Version } from 'meteor/peerlibrary:meteor-packages';
 import { addLinks } from 'meteor/copleykj:grapher-link-executor';
 import { Packages } from '../Packages';
-import { Versions } from '../Versions';
-
+import { Versions, VersionsSchema } from '../Versions';
 const { LatestPackages } = PackageServer;
+
+LatestPackages.attachSchema(VersionsSchema);
 
 export interface ILatestPackagesQueryResult extends LatestPackage {
   meta: Package
@@ -29,7 +30,10 @@ Meteor.startup(() => {
 });
 
 const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQueryResult>('recentlyPublishedPackages', {
-  $filter: () => {},
+  $filters: {
+    unmigrated: { $exists: false },
+  },
+  $filter: () => { },
   published: 1,
   packageName: 1,
   description: 1,
@@ -47,13 +51,42 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
 
 const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('packageSearch', {
   $filters: {
-    published: { $gte: new Date(Date.now() - (60 * 60 * 1000 * 24 * 365 * 5)) },
     unmigrated: { $exists: false },
+    deprecated: false,
     $text: { $search: '' },
   },
   $filter: ({ filters, options, params }: any) => {
     if (typeof params.query !== 'undefined') {
       filters.$text.$search = params.query;
+
+      if (params.deprecated === 'true') {
+        delete filters.deprecated;
+      }
+
+      params.published = typeof params.published !== 'undefined' && params.published.length !== 0 ? params.published : '10:y';
+
+      let [amount, period] = params.published.split(':');
+      const publishedTime = new Date();
+      amount = parseInt(amount, 10);
+      switch (period) {
+        case 'y':
+          publishedTime.setFullYear(publishedTime.getFullYear() - amount);
+          break;
+        case 'm':
+          publishedTime.setMonth(publishedTime.getMonth() - amount);
+          break;
+      }
+
+      filters.published = { $gte: publishedTime };
+
+      switch (params.sort) {
+        case 'newest':
+          options.sort = { published: -1, ...options.sort };
+          break;
+        case 'downloaded':
+          options.sort = { downloads: 1, ...options.sort };
+          break;
+      }
     }
   },
   $options: {
@@ -78,6 +111,7 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
     }
   },
   $options: {
+    sort: { published: -1 },
     limit: 1,
   },
   packageName: 1,
@@ -107,11 +141,15 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
   versions: {
     $options: {
       sort: {
-        version: -1,
+        published: -1,
       },
-      limit: 5,
+      limit: 15,
     },
     version: 1,
+    readme: {
+      fullText: 1,
+    },
+    published: 1,
   },
 });
 

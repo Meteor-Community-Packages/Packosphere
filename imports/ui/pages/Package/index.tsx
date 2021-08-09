@@ -1,47 +1,74 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Terminal, Exclamation, ExternalLinkOutline, Scale } from 'heroicons-react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { xonokai as codeStyles } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ago from 's-ago';
 import slug from 'slug';
 
-import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../client/api/LatestPackages';
+import { QPackageInfo, ILatestPackagesQueryResult } from '../../../../api/LatestPackages';
 import useQuery from '../../hooks/useStaticQuery';
-import Header from '../../components/Header';
 import Page from '../../components/Page';
-import { getAgeInYears } from '../../../utils';
+import { getAgeInYears, formatDateToString } from '../../../utils';
+
+const heading = ({ level, children }: { level: number, children: React.ReactNode }): React.ReactNode => {
+  const Heading = `h${level}` as keyof JSX.IntrinsicElements;
+  return <Heading id={slug(String(children ?? ''))} children={children} />;
+};
 
 const renderers = {
-  code: ({ language, value }: { language: string, value: string }) => {
+  code ({ inline, className, children, ...props }: { inline?: boolean, className?: string, children: React.ReactNode }) {
+    const match = /language-(\w+)/.exec(className ?? '');
     const languages = [
       'ts',
       'typescript',
       'js',
       'javascript',
+      'cs',
+      'coffeescript',
+      'html',
+      'jsx',
+      'json',
+      'css',
     ];
-    return <SyntaxHighlighter style={codeStyles} language={language} showLineNumbers={languages.includes(language)} children={value} />;
+    if (typeof inline !== 'undefined' && inline) {
+      return <code className={className} {...props}>{children}</code>;
+    } else {
+      const language = match?.[1] ?? '';
+      const value = children ?? '';
+      return <SyntaxHighlighter style={codeStyles} language={language} showLineNumbers={languages.includes(language)} children={String(value).replace(/\n$/, '')} />;
+    }
   },
-  heading: ({ level, children, node }: {level: number, children: any, node: any}) => {
-    const Heading = `h${level}` as keyof JSX.IntrinsicElements;
-    return <Heading id={slug(node.children[0].value ?? '')} children={children} />;
-  },
+  h1: heading,
+  h2: heading,
+  h3: heading,
+  h4: heading,
+  h5: heading,
+  h6: heading,
 };
 
 const PackagePage = (): JSX.Element => {
-  const { username, packagename } = useParams<{ username: string, packagename: string }>();
+  const { username, packagename, version } = useParams<{ username: string, packagename: string, version: string | undefined }>();
   const { data, refetch } = useQuery({
     query: QPackageInfo,
     config: { fetchOne: true },
     params: { username, packageName: packagename },
   });
 
-  const pkg = data as ILatestPackagesQueryResult;
+  let pkg;
+  let displayVersion;
+  let age = 0;
 
-  const age = getAgeInYears(pkg?.published);
+  if (typeof data !== 'undefined') {
+    pkg = data as ILatestPackagesQueryResult;
+    const neededVersion = version ?? pkg?.version;
+    displayVersion = pkg.versions.find(v => v.version === neededVersion);
+    age = getAgeInYears(displayVersion?.published);
+  }
   const old = age >= 3;
 
   let publishedIndicator: string;
@@ -63,7 +90,7 @@ const PackagePage = (): JSX.Element => {
   }
 
   useEffect(() => {
-    Meteor.call('updateExternalPackageData', `${username !== 'meteor' ? `${username}:` : ''}${packagename}`,
+    Meteor.call('updateExternalPackageData', `${username !== 'meteor' ? `${username}:` : ''}${packagename}`, version,
       (error: Meteor.Error, result: boolean) => {
         if (typeof error === 'undefined') {
           if (result) {
@@ -72,60 +99,59 @@ const PackagePage = (): JSX.Element => {
         }
       },
     );
-  }, []);
+  }, [version]);
 
   return (
-    <>
-      <Header />
-      <Page>
-        {typeof pkg !== 'undefined'
-          ? <>
-            <section className="flex flex-col space-y-6  pb-3">
-              <div className="flex flex-col space-y-2">
-                <h1 className="text-3xl font-semibold">{pkg.packageName}</h1>
-                <p className="flex space-x-2">
-                  <span className="text-blueGray-400">
-                    v{pkg.version}
-                  </span>
-                  <span>&bull;</span>
-                  <span className={publishedIndicator}>
-                    Published {ago(pkg.published)}
-                  </span>
-                </p>
-              </div>
-              {old && <p className="font-bold text-red-600 text-lg italic">
+    <Page>
+      {typeof pkg !== 'undefined' && typeof displayVersion !== 'undefined'
+        ? <>
+          <Helmet>
+            <title>{pkg.packageName} - Packosphere</title>
+            <meta name="description" content={displayVersion.description} />
+          </Helmet>
+          <section className="flex flex-col space-y-6  pb-3">
+            <div className="flex flex-col space-y-2">
+              <h1 className="text-3xl font-semibold">{displayVersion.packageName}</h1>
+              <p className="flex space-x-2">
+                <span className="text-blueGray-400">
+                  v{displayVersion?.version}
+                </span>
+                <span>&bull;</span>
+                <span className={publishedIndicator}>
+                    Published {ago(displayVersion.published)}
+                </span>
+              </p>
+            </div>
+            {old && <p className="font-bold text-red-600 text-lg italic">
                 This package has not had recent updates. Please investigate it's current state before
                 committing to using it in your project.
-              </p>}
-              <p className="text-lg">{pkg.description}</p>
-            </section>
+            </p>}
+            <p className="text-lg">{displayVersion.description}</p>
+          </section>
 
-            <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 xl:gap-6 items-start">
-              <aside className="flex flex-col space-y-6 lg:order-2 xl:col-span-1">
-                <div>
-                  <h3 className="text-yellow-500 text-lg mb-4">Installation</h3>
-                  <div className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
-                    <Terminal size={22} className="flex-none" />
-                    <code className="select-all">
+          <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 xl:gap-6 items-start">
+            <aside className="flex flex-col space-y-6 lg:order-2 xl:col-span-1">
+              <div>
+                <h3 className="text-yellow-500 text-lg mb-4">Installation</h3>
+                <div className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
+                  <Terminal size={22} className="flex-none" />
+                  <code className="select-all">
                     meteor add {pkg.packageName}
-                    </code>
-                  </div>
+                  </code>
                 </div>
-                {pkg.meta.repoInfo !== null && typeof pkg.meta.repoInfo !== 'undefined' &&
+              </div>
+              {typeof pkg.meta?.repoInfo !== 'undefined' && pkg.meta.repoInfo !== null &&
                   <div className="flex flex-col space-y-4">
                     <div>
                       <h3 className="flex items-center justify-between text-yellow-500 text-lg mb-4">
                         <span>Repo</span>
-                        <span className="text-xs text-blueGray-400">Updated {ago(new Date(pkg.meta.repoInfo.updated_at))}</span>
+                        <span className="text-xs text-blueGray-400">Last pushed {ago(new Date(pkg.meta.repoInfo.pushed_at))}</span>
                       </h3>
                       <a href={pkg.git} target="_blank" className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
                         <ExternalLinkOutline size={22} className="flex-none" />
                         <span>{pkg.git}</span>
                       </a>
                     </div>
-                    {pkg.meta.repoInfo?.fork &&
-                      <span className="italic text-red-600">This package is possibly a fork</span>
-                    }
                     <div className="flex items-center space-x-6 text-center lg:space-x-4">
                       <a href={`${pkg.meta.repoInfo.html_url}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
                         <span>{pkg.meta.repoInfo.open_issues} issues</span>
@@ -151,30 +177,42 @@ const PackagePage = (): JSX.Element => {
                       </p>
                     </div>
                   </div>
-                }
+              }
 
-              </aside>
-              <article className="lg:order-1 xl:col-span-3">
-                {typeof pkg.readme !== 'undefined' && pkg.readme.fullText !== null
-                  ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
-                    {typeof pkg.readme.fullText !== 'undefined'
-                      ? <ReactMarkdown skipHtml plugins={[gfm]} renderers={renderers} children={`${pkg.readme?.fullText ?? ''}`} />
-                      : <p className="text-2xl text-center">Loading...</p>
-                    }
-                  </div>
-                  : <div className="flex flex-col items-center space-y-10 flex-auto text-center py-10 bg-blueGray-600 rounded-md">
-                    <h1 className="text-2xl font-bold">No Documentation</h1>
-                    <Exclamation size={40} className="text-yellow-500"/>
-                    <p>This package does not contain a README file.</p>
-                  </div>
-                }
-              </article>
-            </section>
-          </>
-          : null
-        }
-      </Page>
-    </>
+              <div>
+                <h3 className="text-yellow-500 text-lg mb-4">Versions</h3>
+                <div className="flex flex-col border-blueGray-600 border px-4 py-4 overflow-hidden whitespace-pre rounded-md space-y-4">
+                  {pkg.versions.map(version => {
+                    return (
+                      <Link to={`/${username}/${packagename}/${version.version}`} className="flex items-center space-x-2" key={version._id} >
+                        <span>v{version.version}</span><span className="text-gray-500 text-sm">{formatDateToString(version.published)}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </aside>
+            <article className="lg:order-1 xl:col-span-3">
+              {typeof displayVersion.readme !== 'undefined' && displayVersion.readme.fullText !== null
+                ? <div className="markdown-body bg-blueGray-700 rounded-md px-5 py-7">
+                  {typeof displayVersion.readme.fullText !== 'undefined'
+                    ? <ReactMarkdown skipHtml plugins={[gfm]} components={renderers} children={`${displayVersion.readme?.fullText ?? ''}`} />
+                    : <p className="text-2xl text-center">Loading...</p>
+                  }
+                </div>
+                : <div className="flex flex-col items-center space-y-10 flex-auto text-center py-10 bg-blueGray-600 rounded-md">
+                  <h1 className="text-2xl font-bold">No Documentation</h1>
+                  <Exclamation size={40} className="text-yellow-500"/>
+                  <p>This package does not contain a README file.</p>
+                </div>
+              }
+            </article>
+          </section>
+        </>
+        : null
+      }
+    </Page>
   );
 };
 

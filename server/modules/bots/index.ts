@@ -2,7 +2,7 @@ import PersistentSettings from '../PersistentSettings';
 import { LatestPackages } from '../../api/LatestPackages';
 import { ReleaseVersions } from '../../api/ReleaseVersions';
 import { PackageServer, LatestPackage, ReleaseVersion } from 'meteor/peerlibrary:meteor-packages';
-import { makeAtmosphereLink } from '../../../imports/utils';
+import { makePackosphereLink } from '../../../imports/utils';
 import { postTwitterStatus } from './twitterbot';
 import { postToSlack } from './slackbot';
 import { Meteor } from 'meteor/meteor';
@@ -29,7 +29,7 @@ const batchAnnouncePackageUpdates = (): void => {
       const { packageName, version } = doc;
       const twitterVersion = `${packageName}@${version}\n`;
       const slackVersion = `\`${packageName}@${version}\`\n`;
-      const link = `${makeAtmosphereLink(packageName)}\n\n`;
+      const link = `${makePackosphereLink(packageName)}\n\n`;
       twitterText += twitterVersion + link;
       slackText += slackVersion + link;
       if (twitterText.length > 160) {
@@ -60,7 +60,7 @@ if (Meteor.isProduction) {
         const beginning = 'Metadata Update:';
         const twitterText = `${packageName}\n\n`;
         const slackText = ` \`${packageName}\`\n\n`;
-        const link = `${makeAtmosphereLink(packageName)}`;
+        const link = `${makePackosphereLink(packageName)}`;
 
         void postToSlack(beginning + slackText + link);
         void postTwitterStatus(beginning + twitterText + link);

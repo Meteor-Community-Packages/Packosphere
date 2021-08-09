@@ -1,7 +1,8 @@
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export const makeAtmosphereLink = (packageName: string): string => {
+export const makePackosphereLink = (packageName: string): string => {
   const path = packageName.includes(':') ? packageName.replace(':', '/') : `meteor/${packageName}`;
-  return `https://atmospherejs.com/${path}`;
+  return `https://packosphere.com/${path}`;
 };
 
 export const getAgeInYears = (date: Date | undefined): number => {
@@ -11,4 +12,8 @@ export const getAgeInYears = (date: Date | undefined): number => {
     return diff.getUTCFullYear() - 1970;
   }
   return 0;
+};
+
+export const formatDateToString = (date: Date): string => {
+  return `${months[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
 };

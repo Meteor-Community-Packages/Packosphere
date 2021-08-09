@@ -29,13 +29,19 @@ Packosphere is the realization of a dream to have an open and transparent Packag
    git clone --recurse-submodules https://github.com/Meteor-Community-Packages/Packosphere.git
    ```
 
-3. Install NPM dependencies.
+3. Create settings.json file containing an empty object
 
    ```sh
-   npm i
+   echo {} > settings.json
    ```
 
-4. Start the app.
+4. Install NPM dependencies.
+
+   ```sh
+   meteor npm i
+   ```
+
+5. Start the app.
 
    ```sh
    npm start
