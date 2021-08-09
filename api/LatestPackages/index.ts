@@ -33,7 +33,7 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
   $filters: {
     unmigrated: { $exists: false },
   },
-  $filter: () => {},
+  $filter: () => { },
   published: 1,
   packageName: 1,
   description: 1,
@@ -52,11 +52,41 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
 const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('packageSearch', {
   $filters: {
     unmigrated: { $exists: false },
+    deprecated: false,
     $text: { $search: '' },
   },
   $filter: ({ filters, options, params }: any) => {
     if (typeof params.query !== 'undefined') {
       filters.$text.$search = params.query;
+
+      if (params.deprecated === 'true') {
+        delete filters.deprecated;
+      }
+
+      params.published = typeof params.published !== 'undefined' && params.published.length !== 0 ? params.published : '10:y';
+
+      let [amount, period] = params.published.split(':');
+      const publishedTime = new Date();
+      amount = parseInt(amount, 10);
+      switch (period) {
+        case 'y':
+          publishedTime.setFullYear(publishedTime.getFullYear() - amount);
+          break;
+        case 'm':
+          publishedTime.setMonth(publishedTime.getMonth() - amount);
+          break;
+      }
+
+      filters.published = { $gte: publishedTime };
+
+      switch (params.sort) {
+        case 'newest':
+          options.sort = { published: -1, ...options.sort };
+          break;
+        case 'downloaded':
+          options.sort = { downloads: 1, ...options.sort };
+          break;
+      }
     }
   },
   $options: {

@@ -1,10 +1,12 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import gravatar from 'gravatar';
 import { Link, useHistory } from 'react-router-dom';
-import { Search, Login } from 'heroicons-react';
+import { Search, Login, AdjustmentsOutline } from 'heroicons-react';
 import useLocationQuery from '../../hooks/useLocationQuery';
 import { useTracker } from 'meteor/react-meteor-data';
+import Modal from '../Modal';
+import SearchFilters, { SearchParameters } from '../SearchFilters';
 
 const links = [
   { title: 'About Us', url: 'https://meteorjs.community', external: true },
@@ -14,14 +16,29 @@ const links = [
   { title: 'Slack', url: 'https://tinyurl.com/mcg-slack', external: true },
 ];
 
+const removeEmptyStrings = (obj: any): any => {
+  const newObj: any = {};
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === 'string' && obj[key].length > 0) {
+      newObj[key] = obj[key];
+    }
+  });
+  return newObj;
+};
+
 const HeaderComponent = (): JSX.Element => {
   const [locationQuery, setLocationQuery] = useLocationQuery();
-  const q = typeof locationQuery.q === 'string' ? locationQuery.q : '';
-  const [searchState, setSearchState] = useState(q);
+  const q = locationQuery.q as string ?? '';
+  const published = locationQuery.published as string ?? '';
+  const sort = locationQuery.sort as string ?? '';
+  const deprecated = locationQuery.deprecated as string ?? '';
+  const [searchQuery, setSearchQuery] = useState(q);
+  const [totalAppliedFilters, setTotalAppliedFilters] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useRef<SearchParameters>({ published, sort, deprecated });
 
   const history = useHistory();
   useEffect(() => {
-    // XXX - Figure out how to type this nightmare.
     const unlisten = history.listen((location, action: string) => {
       setTimeout(() => {
         if (action !== 'POP') {
@@ -32,7 +49,6 @@ const HeaderComponent = (): JSX.Element => {
         }
       });
     });
-
     return () => { unlisten(); };
   }, []);
 
@@ -44,14 +60,32 @@ const HeaderComponent = (): JSX.Element => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (searchState.length > 0) {
-      setLocationQuery({ path: '/search', params: { q: searchState } });
+    changeSearchQuery();
+  };
+  const changeSearchQuery = (): void => {
+    if (searchQuery.length > 0) {
+      setLocationQuery({ path: '/search', params: { q: searchQuery, ...searchParams.current } });
     }
   };
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    setSearchState(e.target.value);
+    setSearchQuery(e.target.value);
   };
+  const openModalHandler = (): void => {
+    setIsModalOpen(true);
+  };
+  const closeModalHandler = (e: React.MouseEvent, currentTarget?: HTMLDivElement | null): void => {
+    if (currentTarget === null || typeof currentTarget === 'undefined' || e.target === currentTarget) {
+      setIsModalOpen(false);
+    }
+  };
+  const searchFilterHandler = (filterData: SearchParameters, numAppliedFilters: number): void => {
+    searchParams.current = filterData;
+    setTotalAppliedFilters(numAppliedFilters);
+    setIsModalOpen(false);
+    changeSearchQuery();
+  };
+
   const loginHandler = (): void => {
     Meteor.loginWithMeteorDeveloperAccount();
   };
@@ -84,9 +118,16 @@ const HeaderComponent = (): JSX.Element => {
           </div>
         </Link>
         <div className="flex items-center space-x-5">
+          <button onClick={openModalHandler} className="relative items-center justify-center w-12 h-12 flex flex-shrink-0 rounded-md focus:outline-none hover:bg-blueGray-600 active:bg-blueGray-700" aria-label="Search">
+            <AdjustmentsOutline size={28} className="z-0" />
+            {totalAppliedFilters > 0 ? <span className="absolute w-5 h-5 z-10 -top-0 right-0 text-sm font-semibold bg-yellow-500 rounded-full flex items-center justify-center">{totalAppliedFilters}</span> : null}
+          </button>
+          <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
+            <SearchFilters onApply={searchFilterHandler} onCancel={closeModalHandler} initialValues={removeEmptyStrings({ sort, published, deprecated })} />
+          </Modal>
           <span className="from-yellow-700 to-yellow-600 bg-gradient-to-t rounded-md flex-shrink py-1 px-6 pr-4 inline-flex lg:flex-grow items-center">
             <form onSubmit={submitHandler} className="flex items-center" autoComplete="off">
-              <input type="text" name='search' autoFocus onChange={changeHandler} value={searchState} className="bg-transparent outline-none w-full text-white flex-grow flex-shrink text-xl placeholder-gray-100" placeholder="Search Packages" />
+              <input type="text" name='search' autoFocus onChange={changeHandler} value={searchQuery} className="bg-transparent outline-none w-full text-white flex-grow flex-shrink text-xl placeholder-gray-100 p-0 focus:ring-0 border-0" placeholder="Search Packages" />
               <button className="w-10 h-10 flex items-center justify-center flex-shrink-0 rounded-full focus:outline-none focus:bg-yellow-600 hover:bg-yellow-600" aria-label="Search">
                 <Search size={18} />
               </button>
