@@ -22,29 +22,29 @@ LatestPackages._ensureIndex({
 });
 
 QPackageSearch.expose({
-  firewall () {
+  firewall: () => {
     return true;
   },
 });
 
 QRecentlyPublishedPackages.expose({
-  firewall () {
+  firewall: () => {
     return true;
   },
 });
 
 QPackageInfo.expose({
-  firewall () {
+  firewall: () => {
     return true;
   },
 });
 
 Meteor.methods({
-  async updateExternalPackageData (packageName: string, version: string | null = null) {
+  updateExternalPackageData: async (packageName: string, version: string | null = null) => {
     check(packageName, String);
     check(version, Match.Maybe(String));
     let clientShouldFetch = false;
-    const updateObj: { $set: { 'readme.fullText'?: string | null, lastFetched?: Date | null}} = { $set: {} };
+    const updateObj: { $set: { 'readme.fullText'?: string | null, lastFetched?: Date | null } } = { $set: {} };
 
     const pkg = LatestPackages.findOne({
       packageName,

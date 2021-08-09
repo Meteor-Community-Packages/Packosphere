@@ -128,6 +128,7 @@ const QPackageInfo = LatestPackages.createQuery<ILatestPackagesQueryResult>('pac
       forks_count: 1,
       open_issues: 1,
       watchers_count: 1,
+      pushed_at: 1,
       fork: 1,
       updated_at: 1,
       language: 1,

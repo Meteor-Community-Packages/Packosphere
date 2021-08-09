@@ -21,7 +21,7 @@ const heading = ({ level, children }: { level: number, children: React.ReactNode
 };
 
 const renderers = {
-  code ({ inline, className, children, ...props }: { inline?: boolean, className?: string, children: React.ReactNode }) {
+  code: ({ inline, className, children, ...props }: { inline?: boolean, className?: string, children: React.ReactNode }) => {
     const match = /language-(\w+)/.exec(className ?? '');
     const languages = [
       'ts',
@@ -118,13 +118,13 @@ const PackagePage = (): JSX.Element => {
                 </span>
                 <span>&bull;</span>
                 <span className={publishedIndicator}>
-                    Published {ago(displayVersion.published)}
+                  Published {ago(displayVersion.published)}
                 </span>
               </p>
             </div>
             {old && <p className="font-bold text-red-600 text-lg italic">
-                This package has not had recent updates. Please investigate it's current state before
-                committing to using it in your project.
+              This package has not had recent updates. Please investigate it's current state before
+              committing to using it in your project.
             </p>}
             <p className="text-lg">{displayVersion.description}</p>
           </section>
@@ -141,42 +141,42 @@ const PackagePage = (): JSX.Element => {
                 </div>
               </div>
               {typeof pkg.meta?.repoInfo !== 'undefined' && pkg.meta.repoInfo !== null &&
-                  <div className="flex flex-col space-y-4">
-                    <div>
-                      <h3 className="flex items-center justify-between text-yellow-500 text-lg mb-4">
-                        <span>Repo</span>
-                        <span className="text-xs text-blueGray-400">Last pushed {ago(new Date(pkg.meta.repoInfo.pushed_at))}</span>
-                      </h3>
-                      <a href={pkg.git} target="_blank" className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
-                        <ExternalLinkOutline size={22} className="flex-none" />
-                        <span>{pkg.git}</span>
-                      </a>
-                    </div>
-                    <div className="flex items-center space-x-6 text-center lg:space-x-4">
-                      <a href={`${pkg.meta.repoInfo.html_url}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo.open_issues} issues</span>
-                      </a>
-                      <a href={`${pkg.meta.repoInfo.html_url}/stargazers`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo.stargazers_count} stars</span>
-                      </a>
-                      <a href={`${pkg.meta.repoInfo.html_url}/network/members`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo.forks_count} forks</span>
-                      </a>
-                      <a href={`${pkg.meta.repoInfo.html_url}/watchers`} target="_blank" className="flex items-center space-x-2 font-bold">
-                        <span>{pkg.meta.repoInfo.watchers_count} watchers</span>
-                      </a>
-                    </div>
-                    <div className="flex space-x-6 items-center">
-                      <span className="flex w-7 h-7 bg-white items-end justify-end rounded-sm">
-                        <span className="text-blueGray-800 font-extrabold text-xl font-mono -mb-1">
-                          {pkg.meta.repoInfo.language === 'TypeScript' ? 'TS' : 'JS'}
-                        </span>
-                      </span>
-                      <p className="flex items-center space-x-2">
-                        <Scale size={25} className="inline-block" /><span className="font-bold">{pkg.meta.repoInfo.license?.spdx_id ?? 'No License'}</span>
-                      </p>
-                    </div>
+                <div className="flex flex-col space-y-4">
+                  <div>
+                    <h3 className="flex items-center justify-between text-yellow-500 text-lg mb-4">
+                      <span>Repo</span>
+                      <span className="text-xs text-blueGray-400">{typeof pkg.meta.repoInfo.pushed_at !== 'undefined' && `Pushed ${ago(new Date(pkg.meta.repoInfo.pushed_at))}`}</span>
+                    </h3>
+                    <a href={pkg.git} target="_blank" className="flex items-center border-blueGray-600 border px-4 py-2 overflow-hidden whitespace-pre rounded-md space-x-4">
+                      <ExternalLinkOutline size={22} className="flex-none" />
+                      <span>{pkg.git}</span>
+                    </a>
                   </div>
+                  <div className="flex items-center space-x-6 text-center lg:space-x-4">
+                    <a href={`${pkg.meta.repoInfo.html_url}/issues`} target="_blank" className="flex items-center space-x-2 font-bold">
+                      <span>{pkg.meta.repoInfo.open_issues} issues</span>
+                    </a>
+                    <a href={`${pkg.meta.repoInfo.html_url}/stargazers`} target="_blank" className="flex items-center space-x-2 font-bold">
+                      <span>{pkg.meta.repoInfo.stargazers_count} stars</span>
+                    </a>
+                    <a href={`${pkg.meta.repoInfo.html_url}/network/members`} target="_blank" className="flex items-center space-x-2 font-bold">
+                      <span>{pkg.meta.repoInfo.forks_count} forks</span>
+                    </a>
+                    <a href={`${pkg.meta.repoInfo.html_url}/watchers`} target="_blank" className="flex items-center space-x-2 font-bold">
+                      <span>{pkg.meta.repoInfo.watchers_count} watchers</span>
+                    </a>
+                  </div>
+                  <div className="flex space-x-6 items-center">
+                    <span className="flex w-7 h-7 bg-white items-end justify-end rounded-sm">
+                      <span className="text-blueGray-800 font-extrabold text-xl font-mono -mb-1">
+                        {pkg.meta.repoInfo.language === 'TypeScript' ? 'TS' : 'JS'}
+                      </span>
+                    </span>
+                    <p className="flex items-center space-x-2">
+                      <Scale size={25} className="inline-block" /><span className="font-bold">{pkg.meta.repoInfo.license?.spdx_id ?? 'No License'}</span>
+                    </p>
+                  </div>
+                </div>
               }
 
               <div>
@@ -203,7 +203,7 @@ const PackagePage = (): JSX.Element => {
                 </div>
                 : <div className="flex flex-col items-center space-y-10 flex-auto text-center py-10 bg-blueGray-600 rounded-md">
                   <h1 className="text-2xl font-bold">No Documentation</h1>
-                  <Exclamation size={40} className="text-yellow-500"/>
+                  <Exclamation size={40} className="text-yellow-500" />
                   <p>This package does not contain a README file.</p>
                 </div>
               }
