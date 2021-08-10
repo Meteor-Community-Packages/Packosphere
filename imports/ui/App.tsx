@@ -9,8 +9,9 @@ import Footer from './components/Footer';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { renderWithSSR } from 'meteor/communitypackages:react-router-ssr';
+import { ShareButton } from './components/ShareButton';
 
-const App = (): JSX.Element => {
+export const App = (): JSX.Element => {
   return (
     <>
       <div className="min-h-screen">
@@ -30,6 +31,7 @@ const App = (): JSX.Element => {
           </Route>
         </Switch>
       </div>
+      <div className="fixed bottom-10 right-10 w-14 h-14 rounded-full hover:bg-yellow-500 bg-yellow-600 shadow-lg"><ShareButton /></div>
       <Footer />
     </>
   );

@@ -17,3 +17,7 @@ export const getAgeInYears = (date: Date | undefined): number => {
 export const formatDateToString = (date: Date): string => {
   return `${months[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
 };
+
+export const setClipboardText = async (text: string): Promise<void> => {
+  return await navigator.clipboard.writeText(text);
+};
