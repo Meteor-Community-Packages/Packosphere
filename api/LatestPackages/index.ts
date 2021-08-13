@@ -52,7 +52,7 @@ const QRecentlyPublishedPackages = LatestPackages.createQuery<ILatestPackagesQue
 const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('packageSearch', {
   $filters: {
     unmigrated: { $exists: false },
-    deprecated: false,
+    $or: [{ deprecated: false }, { deprecated: { $exists: false } }],
     $text: { $search: '' },
   },
   $filter: ({ filters, options, params }: any) => {
@@ -60,7 +60,7 @@ const QPackageSearch = LatestPackages.createQuery<ILatestPackagesQueryResult>('p
       filters.$text.$search = params.query;
 
       if (params.deprecated === 'true') {
-        delete filters.deprecated;
+        delete filters.$or;
       }
 
       params.published = typeof params.published !== 'undefined' && params.published.length !== 0 ? params.published : '10:y';
