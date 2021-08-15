@@ -15,5 +15,5 @@ export const getAgeInYears = (date: Date | undefined): number => {
 };
 
 export const formatDateToString = (date: Date): string => {
-  return `${months[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 };
