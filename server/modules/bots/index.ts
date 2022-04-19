@@ -1,7 +1,7 @@
 import PersistentSettings from '../PersistentSettings';
 import { LatestPackages } from '../../api/LatestPackages';
 import { ReleaseVersions } from '../../api/ReleaseVersions';
-import { PackageServer, LatestPackage, ReleaseVersion } from 'meteor/peerlibrary:meteor-packages';
+import { PackageServer, ReleaseVersion } from 'meteor/peerlibrary:meteor-packages';
 import { makePackosphereLink } from '../../../imports/utils';
 import { postTwitterStatus } from './twitterbot';
 import { postToSlack } from './slackbot';
@@ -53,19 +53,6 @@ if (Meteor.isProduction) {
     }
 
     Meteor.setInterval(batchAnnouncePackageUpdates, ANNOUNCE_INTERVAL);
-
-    LatestPackages.after.update((userId: string, doc: LatestPackage) => {
-      const { packageName, lastUpdated, published } = doc;
-      if (lastUpdated.getTime() !== published.getTime()) {
-        const beginning = 'Metadata Update:';
-        const twitterText = `${packageName}\n\n`;
-        const slackText = ` \`${packageName}\`\n\n`;
-        const link = `${makePackosphereLink(packageName)}`;
-
-        void postToSlack(beginning + slackText + link);
-        void postTwitterStatus(beginning + twitterText + link);
-      }
-    }, { fetchPrevious: false });
 
     ReleaseVersions.after.insert((userId: string, doc: ReleaseVersion) => {
       const { track, version } = doc;
