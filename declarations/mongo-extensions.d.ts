@@ -43,9 +43,64 @@ declare module 'meteor/mongo' {
       transform?: Function | null
     }
 
+    // Meteor 3.0 async cursor methods
+    interface Cursor<T> {
+      countAsync(): Promise<number>
+      fetchAsync(): Promise<T[]>
+      forEachAsync(callback: (doc: T, index: number, cursor: Cursor<T>) => void): Promise<void>
+      mapAsync<U>(callback: (doc: T, index: number, cursor: Cursor<T>) => U): Promise<U[]>
+      [Symbol.asyncIterator](): AsyncIterator<T>
+    }
+
     // meteor/mongo
     // eslint-disable-next-line
     export interface Collection<T> {
+      // Meteor 3.0 async methods
+      findOneAsync: (
+        selector?: Selector<T> | ObjectID | string,
+        options?: {
+          sort?: SortSpecifier
+          skip?: number
+          fields?: FieldSpecifier
+          reactive?: boolean
+          transform?: (doc: any) => void
+        },
+      ) => Promise<T | undefined>
+
+      insertAsync: (doc: T) => Promise<string>
+
+      updateAsync: (
+        selector: Selector<T> | ObjectID | string,
+        modifier: Modifier<T>,
+        options?: {
+          multi?: boolean
+          upsert?: boolean
+        },
+      ) => Promise<number>
+
+      upsertAsync: (
+        selector: Selector<T> | ObjectID | string,
+        modifier: Modifier<T>,
+        options?: {
+          multi?: boolean
+        },
+      ) => Promise<{ numberAffected?: number; insertedId?: string }>
+
+      removeAsync: (
+        selector: Selector<T> | ObjectID | string,
+      ) => Promise<number>
+
+      createIndexAsync: (
+        index: Record<string, number | string>,
+        options?: {
+          weights?: Record<string, number>
+          name?: string
+          unique?: boolean
+          sparse?: boolean
+          background?: boolean
+        },
+      ) => Promise<void>
+
       // simpl-schema
       schema: SimplSchema
 

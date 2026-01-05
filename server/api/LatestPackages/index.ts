@@ -11,14 +11,17 @@ const MS_IN_1_DAY = 1000 * 24 * 60 * 60;
 
 const GitHub = new Octokit({});
 
-LatestPackages._ensureIndex({
-  packageName: 'text',
-  description: 'text',
-  longDescription: 'text',
-}, {
-  weights: {
-    packageName: 20,
-  },
+// Create text index for search (async in Meteor 3.0)
+Meteor.startup(async () => {
+  await LatestPackages.createIndexAsync({
+    packageName: 'text',
+    description: 'text',
+    longDescription: 'text',
+  }, {
+    weights: {
+      packageName: 20,
+    },
+  });
 });
 
 QPackageSearch.expose({
@@ -46,7 +49,7 @@ Meteor.methods({
     let clientShouldFetch = false;
     const updateObj: { $set: { 'readme.fullText'?: string | null, lastFetched?: Date | null } } = { $set: {} };
 
-    const pkg = LatestPackages.findOne({
+    const pkg = await LatestPackages.findOneAsync({
       packageName,
     }, {
       fields: {
@@ -57,7 +60,7 @@ Meteor.methods({
     const { owner, name: repo } = ParseGitHubUrl(pkg?.git ?? '') ?? { owner: null, name: null };
 
     if (typeof pkg !== 'undefined') {
-      const versionDoc = Versions.findOne({
+      const versionDoc = await Versions.findOneAsync({
         packageName,
         version: version ?? pkg.version,
       }, {
@@ -71,7 +74,7 @@ Meteor.methods({
         const response = await fetch(versionDoc.readme.url);
         if (response.status === 200) {
           const fullText = await response.text();
-          Versions.update({ _id: versionDoc._id, version: versionDoc.version }, { $set: { 'readme.fullText': fullText.length > 0 ? fullText : null } });
+          await Versions.updateAsync({ _id: versionDoc._id, version: versionDoc.version }, { $set: { 'readme.fullText': fullText.length > 0 ? fullText : null } });
           clientShouldFetch = true;
         }
       }
@@ -84,7 +87,7 @@ Meteor.methods({
               repo,
             });
 
-            Packages.update({ name: pkg.packageName }, { $set: { repoInfo: data as unknown as RepoInfo } });
+            await Packages.updateAsync({ name: pkg.packageName }, { $set: { repoInfo: data as unknown as RepoInfo } });
             updateObj.$set.lastFetched = new Date();
             clientShouldFetch = true;
           } catch (error) {
@@ -95,7 +98,9 @@ Meteor.methods({
         }
       }
 
-      Object.keys(updateObj.$set).length > 0 && LatestPackages.update({ _id: pkg._id }, updateObj);
+      if (Object.keys(updateObj.$set).length > 0) {
+        await LatestPackages.updateAsync({ _id: pkg._id }, updateObj);
+      }
     }
 
     return clientShouldFetch;

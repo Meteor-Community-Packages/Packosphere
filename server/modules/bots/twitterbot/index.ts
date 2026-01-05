@@ -1,21 +1,39 @@
 import { Meteor } from 'meteor/meteor';
+import { TwitterApi } from 'twitter-api-v2';
 
-import Twitter, { AccessTokenOptions } from 'twitter';
+interface TwitterSettings {
+  consumer_key: string
+  consumer_secret: string
+  access_token_key: string
+  access_token_secret: string
+}
 
-const twitterOauth: AccessTokenOptions = Meteor.settings?.twitter;
-let client: Twitter | null = null;
+const twitterSettings: TwitterSettings | undefined = Meteor.settings?.twitter;
+let client: TwitterApi | null = null;
 
-if (typeof twitterOauth !== 'undefined' && Object.keys(twitterOauth).length >= 4) {
-  client = new Twitter(twitterOauth);
-};
+// Only initialize if all required tokens are present and non-empty
+if (
+  typeof twitterSettings !== 'undefined' &&
+  twitterSettings.consumer_key &&
+  twitterSettings.consumer_secret &&
+  twitterSettings.access_token_key &&
+  twitterSettings.access_token_secret
+) {
+  client = new TwitterApi({
+    appKey: twitterSettings.consumer_key,
+    appSecret: twitterSettings.consumer_secret,
+    accessToken: twitterSettings.access_token_key,
+    accessSecret: twitterSettings.access_token_secret,
+  });
+}
 
 export const postTwitterStatus = async (text: string): Promise<void> => {
   if (client !== null) {
     text = text.replace(/(<)|(>)/g, '');
     try {
-      await client.post('statuses/update', { status: text });
+      await client.v2.tweet(text);
     } catch (error) {
-      console.log(error);
+      console.log('Twitter API error:', error);
     }
   }
 };

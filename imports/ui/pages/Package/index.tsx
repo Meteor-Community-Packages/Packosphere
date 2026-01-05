@@ -66,7 +66,7 @@ const PackagePage = (): JSX.Element => {
   if (typeof data !== 'undefined') {
     pkg = data as ILatestPackagesQueryResult;
     const neededVersion = version ?? pkg?.version;
-    displayVersion = pkg.versions.find(v => v.version === neededVersion);
+    displayVersion = pkg.versions?.find(v => v.version === neededVersion);
     age = getAgeInYears(displayVersion?.published);
   }
   const old = age >= 3;
@@ -179,6 +179,7 @@ const PackagePage = (): JSX.Element => {
                 </div>
               }
 
+              {pkg.versions && pkg.versions.length > 0 && (
               <div>
                 <h3 className="text-yellow-500 text-lg mb-4">Versions</h3>
                 <div className="flex flex-col border-blueGray-600 border px-4 py-4 overflow-hidden whitespace-pre rounded-md space-y-4">
@@ -191,6 +192,7 @@ const PackagePage = (): JSX.Element => {
                   })}
                 </div>
               </div>
+              )}
 
             </aside>
             <article className="lg:order-1 xl:col-span-3">

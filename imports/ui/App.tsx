@@ -7,34 +7,41 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { renderWithSSR } from 'meteor/communitypackages:react-router-ssr';
 import { ShareButton } from './components/ShareButton';
 
-export const App = (): JSX.Element => {
+// Layout component wraps all routes
+const Layout = (): JSX.Element => {
   return (
     <>
       <div className="min-h-screen">
         <Header />
-        <Switch>
-          <Route exact path="/">
-            <LandingPage />
-          </Route>
-          <Route exact path="/search">
-            <SearchPage />
-          </Route>
-          <Route exact path="/:username/:packagename/:version?">
-            <PackagePage />
-          </Route>
-          <Route path="/:username">
-            <MaintainerPage />
-          </Route>
-        </Switch>
+        <Outlet />
       </div>
-      <div className="fixed bottom-10 right-10 w-14 h-14 rounded-full hover:bg-yellow-500 bg-yellow-600 shadow-lg"><ShareButton /></div>
+      <div className="fixed bottom-10 right-10 w-14 h-14 rounded-full hover:bg-yellow-500 bg-yellow-600 shadow-lg">
+        <ShareButton />
+      </div>
       <Footer />
     </>
   );
 };
 
-renderWithSSR(<App />);
+// Routes array for react-router-ssr v6
+const AppRoutes = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { index: true, element: <LandingPage /> },
+      { path: 'search', element: <SearchPage /> },
+      { path: ':username/:packagename/:version?', element: <PackagePage /> },
+      { path: ':username', element: <MaintainerPage /> },
+    ],
+  },
+];
+
+renderWithSSR(AppRoutes);
+
+// Export for potential client-side use
+export { AppRoutes };

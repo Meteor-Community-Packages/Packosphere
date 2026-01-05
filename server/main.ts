@@ -6,13 +6,18 @@ import { WebApp } from 'meteor/webapp';
 import './modules/bots';
 import './modules/accounts';
 import './api';
+import './mcp';
 import '../imports/ui/App';
 
 // Tell Meteor to publish the meteor-developer email address so that fast render sends it with html
 Accounts._defaultPublishFields.projection = { 'services.meteor-developer.emails.address': 1, ...Accounts._defaultPublishFields.projection };
 
 Meteor.startup(() => {
-  PackageServer.startSyncing();
+  // Start syncing with memory-efficient settings
+  PackageServer.startSyncing({
+    logging: true, // Enable logging to see sync progress
+    batchSize: 200, // Process 200 packages at a time to reduce memory usage
+  });
 
   WebApp.addHtmlAttributeHook(() => ({ lang: 'en' }));
 });

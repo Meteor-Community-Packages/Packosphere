@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useEffect, useState, useRef } from 'react';
 import gravatar from 'gravatar';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useLocation, useNavigationType } from 'react-router-dom';
 import { Search, Login, AdjustmentsOutline } from 'heroicons-react';
 import useLocationQuery from '../../hooks/useLocationQuery';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -36,21 +36,28 @@ const HeaderComponent = (): JSX.Element => {
   const [totalAppliedFilters, setTotalAppliedFilters] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchParams = useRef<SearchParameters>({ published, sort, deprecated });
+  // Track client-side mounting to avoid hydration mismatch with auth state
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  const history = useHistory();
+  const location = useLocation();
+  const navigationType = useNavigationType();
+
+  // Set hydrated state after mount to ensure consistent SSR/client rendering
   useEffect(() => {
-    const unlisten = history.listen((location, action: string) => {
-      setTimeout(() => {
-        if (action !== 'POP') {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-          });
-        }
-      });
-    });
-    return () => { unlisten(); };
+    setIsHydrated(true);
   }, []);
+
+  // Scroll to top on navigation (except back/forward)
+  useEffect(() => {
+    if (navigationType !== 'POP') {
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      });
+    }
+  }, [location, navigationType]);
 
   const user = useTracker(() => {
     return Meteor.user();
@@ -134,7 +141,7 @@ const HeaderComponent = (): JSX.Element => {
             </form>
           </span>
           <div className="flex items-center justify-center flex-shrink-0">
-            {Meteor.userId() !== null
+            {isHydrated && Meteor.userId() !== null
               ? <img src={userImage} alt={`${user?.profile.name}'s Avatar`} className="w-11 h-11 rounded-full ring-2 ring-yellow-600 ring-offset-2 flex-shrink-0" />
               : <button onClick={loginHandler} title="Log In" className="flex items-center justify-center w-10 h-10 rounded-full ring-4 ring-blueGray-500 bg-blueGray-600 flex-shrink-0 focus:outline-none" >
                 <Login size={22} />

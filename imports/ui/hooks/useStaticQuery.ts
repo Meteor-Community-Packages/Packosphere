@@ -61,27 +61,14 @@ const useStaticQuery = function <T>({ query, params = {}, config: { loadOnRefetc
   };
 
   const fetchServer = (): any => {
-    let data;
-    let count;
-    let error;
-    const loading = false;
-    try {
-      if (fetchOne) {
-        data = newQuery.fetchOne();
-      } else {
-        data = newQuery.fetch();
-        if (fetchTotal) {
-          count = newQuery.getCount();
-        }
-      }
-    } catch (err) {
-      data = [];
-      error = err;
-      count = undefined;
-    }
-    FastRender.addExtraData('staticQueryData', { data, count });
-    const serverData = { data, count, error, loading };
-    return serverData;
+    // In Meteor 3.0, sync database operations are not available.
+    // Return empty data on server - client will fetch asynchronously.
+    const data = fetchOne ? undefined : [];
+    const count = undefined;
+    const error = null;
+    const loading = true;
+    // Don't add extra data since we're not pre-fetching
+    return { data, count, error, loading };
   };
 
   const refetch = (): void => {

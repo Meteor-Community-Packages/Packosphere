@@ -1,7 +1,7 @@
 import { PackageServer, Package, LatestPackage } from 'meteor/peerlibrary:meteor-packages';
 import { addLinks } from 'meteor/copleykj:grapher-link-executor';
 
-import SimpleSchema from 'simpl-schema';
+import SimpleSchema from 'meteor/aldeed:simple-schema';
 
 import { LatestPackages } from '../LatestPackages';
 import { Meteor } from 'meteor/meteor';
@@ -40,6 +40,7 @@ const PackagesSchema = new SimpleSchema({
 });
 
 Packages.attachSchema(PackagesSchema);
+
 export interface IPackagesQueryResult extends Package {
   currentVersion: LatestPackage
 }
